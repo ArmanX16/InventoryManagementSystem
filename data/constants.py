@@ -267,7 +267,7 @@ NAVIGATION_ITEMS = [
     ("reorder", ft.Icons.AUTORENEW, "Smart Reorder"),
     ("risk", ft.Icons.WARNING, "Risk & Alerts"),
     ("analytics", ft.Icons.BAR_CHART, "Analytics"),
-    ("ai_models", ft.Icons.LIGHTBULB, "AI Models"),
+    ("data_cleaning", ft.Icons.CLEANING_SERVICES, "Data Cleaning"),
     ("purchase_orders", ft.Icons.RECEIPT, "Purchase Orders"),
     ("admin", ft.Icons.ADMIN_PANEL_SETTINGS, "Admin Panel"),
 ]
