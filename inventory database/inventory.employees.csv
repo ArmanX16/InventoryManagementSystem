@@ -1,8 +1,8 @@
 _id,name,gender,contact,dob,email,password,role,salary,address,performance_score,total_sales,anomaly_flag,employee_id
 69c668ef08e9d8cb13612cf2,Ravi Verma,Male,8449163581,01-01-2000,emp1@mail.com,pass123,Employee,50863,"Street 24, Delhi",90,0,false,emp1
-69c668ef08e9d8cb13612cf3,Saniya Khan,Female,9876543210,12-05-1998,saniya.k@mail.com,san@98,Manager,85000,"Sector 15, Gurgaon",95,1200,false,emp2
+69c668ef08e9d8cb13612cf3,Saniya Khan,Female,9876543210,12-05-1998,saniya.k@mail.com,a,Admin,85000,"Sector 15, Gurgaon",95,1200,false,emp2
 69c668ef08e9d8cb13612cf4,Suya Sharma,Female,9876543211,22-11-1997,suya.s@mail.com,suya!123,Analyst,62000,"MG Road, Bangalore",88,500,false,emp3
-69c668ef08e9d8cb13612cf5,Narendra Modi,Male,9876543212,17-09-1950,narendra.m@mail.com,nar#456,Lead,120000,"Race Course, Delhi",99,0,false,emp4
+69c668ef08e9d8cb13612cf5,Narendra Modi,Male,9876543212,17-09-1950,narendra.m@mail.com,nar#456,Admin,120000,"Race Course, Delhi",99,0,false,emp4
 69c668ef08e9d8cb13612cf6,Mohit Gupta,Male,9876543213,05-03-1995,mohit.g@mail.com,mohit%78,Developer,75000,"Vikas Nagar, Lucknow",82,200,false,emp5
 69c668ef08e9d8cb13612cf7,Ajay Devgan,Male,9876543214,02-04-1969,ajay.d@mail.com,ajay^90,Employee,55000,"Juhu, Mumbai",78,150,false,emp6
 69c668ef08e9d8cb13612cf8,Suresh Raina,Male,9876543215,27-11-1986,suresh.r@mail.com,sur&11,HR,68000,"Civil Lines, Kanpur",85,0,false,emp7

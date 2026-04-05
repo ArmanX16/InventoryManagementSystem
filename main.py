@@ -40,6 +40,7 @@ PAGE_BUILDER_REGISTRY = {
 # ---------------- ROLE ACCESS ----------------
 ROLE_ACCESS = {
     "Admin": list(PAGE_BUILDER_REGISTRY.keys()),
+    "Lead": list(PAGE_BUILDER_REGISTRY.keys()),
 
     "Manager": [
         "dashboard",
