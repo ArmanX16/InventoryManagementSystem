@@ -3,7 +3,6 @@ import flet as ft
 from ui.theme import (
     ACCENT_PRIMARY,
     SURFACE_DARK,
-    BACKGROUND_DARK,
     BORDER_DEFAULT,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -12,20 +11,20 @@ from ui.theme import (
 from data.constants import NAVIGATION_ITEMS, ALL_ALERTS
 
 
+# ---------------- SIDEBAR ----------------
 def build_sidebar_navigation(
     currently_active_route_key,
     on_navigation_item_click_callback,
     on_logout_click_callback,
+    user_data=None,   # ✅ SESSION DATA
 ):
-    def build_nav_item_button(
-        route_key,
-        item_icon,
-        item_display_label,
-    ):
+
+    # ---------------- NAV BUTTON ----------------
+    def build_nav_item_button(route_key, item_icon, item_display_label):
         is_currently_active = currently_active_route_key == route_key
 
-        def handle_nav_item_click(click_event, clicked_route_key=route_key):
-            on_navigation_item_click_callback(clicked_route_key)
+        def handle_nav_item_click(e):
+            on_navigation_item_click_callback(route_key)
 
         nav_button_container = ft.Container(
             content=ft.Row(
@@ -65,6 +64,8 @@ def build_sidebar_navigation(
 
         return nav_button_container
 
+
+    # ---------------- HEADER ----------------
     logo_header_section = ft.Container(
         ft.Row(
             [
@@ -76,12 +77,7 @@ def build_sidebar_navigation(
                 ),
                 ft.Column(
                     [
-                        ft.Text(
-                            "InventoryAI",
-                            color=TEXT_PRIMARY,
-                            size=15,
-                            weight=ft.FontWeight.BOLD,
-                        ),
+                        ft.Text("InventoryAI", color=TEXT_PRIMARY, size=15, weight=ft.FontWeight.BOLD),
                         ft.Text("Smart Management", color=TEXT_SECONDARY, size=10),
                     ],
                     spacing=0,
@@ -92,6 +88,8 @@ def build_sidebar_navigation(
         padding=ft.Padding.symmetric(horizontal=16, vertical=20),
     )
 
+
+    # ---------------- NAV LIST ----------------
     navigation_buttons_list = ft.Column(
         [
             build_nav_item_button(route_key, nav_icon, nav_label)
@@ -102,12 +100,60 @@ def build_sidebar_navigation(
         spacing=2,
     )
 
+
+    # ---------------- USER DATA ----------------
+    user_name = "User"
+    user_email = "user@email.com"
+    user_role = "Employee"
+    user_contact = ""
+    user_address = ""
+
+    if user_data:
+        user_name = user_data.get("name", "User")
+        user_email = user_data.get("email", "")
+        user_role = user_data.get("role", "")
+        user_contact = user_data.get("contact", "")
+        user_address = user_data.get("address", "")
+
+    avatar_letter = user_name[0].upper() if user_name else "U"
+
+
+    # ---------------- PROFILE POPUP ----------------
+    def open_profile(e):
+
+        def close_dialog(ev):
+            dlg.open = False
+            e.page.update()
+
+        dlg = ft.AlertDialog(
+            title=ft.Text("Employee Profile"),
+            content=ft.Column(
+                [
+                    ft.Text(f"Name: {user_name}"),
+                    ft.Text(f"Email: {user_email}"),
+                    ft.Text(f"Role: {user_role}"),
+                    ft.Text(f"Contact: {user_contact}"),
+                    ft.Text(f"Address: {user_address}"),
+                ],
+                tight=True,
+            ),
+            actions=[
+                ft.TextButton("Close", on_click=close_dialog)
+            ],
+        )
+
+        e.page.dialog = dlg
+        dlg.open = True
+        e.page.update()
+
+
+    # ---------------- FOOTER ----------------
     user_profile_footer = ft.Container(
         ft.Row(
             [
                 ft.Container(
                     ft.Text(
-                        "A",
+                        avatar_letter,
                         color=TEXT_PRIMARY,
                         size=14,
                         weight=ft.FontWeight.BOLD,
@@ -116,15 +162,22 @@ def build_sidebar_navigation(
                     width=34,
                     height=34,
                     border_radius=17,
-                    alignment=ft.Alignment.CENTER,
+                    # ❌ REMOVED alignment (deprecated issue)
                 ),
                 ft.Column(
                     [
-                        ft.Text("Admin User", color=TEXT_PRIMARY, size=13),
-                        ft.Text("admin@company.com", color=TEXT_SECONDARY, size=10),
+                        ft.Text(user_name, color=TEXT_PRIMARY, size=13),
+                        ft.Text(user_email, color=TEXT_SECONDARY, size=10),
                     ],
                     spacing=1,
                     expand=True,
+                ),
+                ft.IconButton(
+                    ft.Icons.INFO,
+                    icon_color=TEXT_SECONDARY,
+                    icon_size=16,
+                    tooltip="Profile",
+                    on_click=open_profile,
                 ),
                 ft.IconButton(
                     ft.Icons.LOGOUT,
@@ -139,6 +192,8 @@ def build_sidebar_navigation(
         padding=ft.Padding.all(14),
     )
 
+
+    # ---------------- FINAL SIDEBAR ----------------
     return ft.Container(
         width=230,
         bgcolor=SURFACE_DARK,
@@ -158,6 +213,7 @@ def build_sidebar_navigation(
     )
 
 
+# ---------------- TOPBAR ----------------
 def build_topbar(currently_active_route_key):
     current_page_display_label = next(
         (
@@ -194,7 +250,6 @@ def build_topbar(currently_active_route_key):
                 border_radius=8,
                 width=16,
                 height=16,
-                alignment=ft.Alignment.CENTER,
                 right=4,
                 top=4,
             ),
@@ -236,7 +291,6 @@ def build_topbar(currently_active_route_key):
                 current_date_label,
             ],
             spacing=8,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
         ),
         bgcolor=SURFACE_DARK,
         border=ft.Border.only(bottom=ft.BorderSide(1, BORDER_DEFAULT)),

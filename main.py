@@ -4,9 +4,7 @@ from ui.theme import BACKGROUND_DARK
 from ui.shell_layout import build_sidebar_navigation, build_topbar
 from ui.auth_screen import show_auth_screen
 
-
 from pages.data_cleaning_visualization import build_data_cleaning_visualization_page
-
 from pages.page_dashboard import build_dashboard_page
 from pages.page_products import build_products_page
 from pages.page_categories import build_categories_page
@@ -17,10 +15,11 @@ from pages.page_forecast import build_forecast_page
 from pages.page_reorder import build_reorder_page
 from pages.page_risk import build_risk_page
 from pages.page_analytics import build_analytics_page
-
 from pages.page_purchase_orders import build_purchase_orders_page
 from pages.page_admin import build_admin_page
 
+
+# ---------------- PAGE REGISTRY ----------------
 PAGE_BUILDER_REGISTRY = {
     "dashboard": build_dashboard_page,
     "products": build_products_page,
@@ -35,12 +34,63 @@ PAGE_BUILDER_REGISTRY = {
     "analytics": build_analytics_page,
     "purchase_orders": build_purchase_orders_page,
     "admin": build_admin_page,
-
-
 }
 
 
+# ---------------- ROLE ACCESS ----------------
+ROLE_ACCESS = {
+    "Admin": list(PAGE_BUILDER_REGISTRY.keys()),
 
+    "Manager": [
+        "dashboard",
+        "products",
+        "categories",
+        "sales",
+        "suppliers",
+        "forecast",
+        "analytics",
+        "purchase_orders",
+    ],
+
+    "Employee": [
+        "dashboard",
+        "products",
+        "sales",
+    ],
+}
+
+
+# ---------------- SESSION CACHE ----------------
+user_session_cache = {}
+
+
+def set_session(page, key, value):
+    user_session_cache[key] = value
+    try:
+        page.session.set(key, value)
+    except:
+        pass
+
+
+def get_session(page, key):
+    try:
+        val = page.session.get(key)
+        if val:
+            return val
+    except:
+        pass
+    return user_session_cache.get(key)
+
+
+def remove_session(page, key):
+    user_session_cache.pop(key, None)
+    try:
+        page.session.remove(key)
+    except:
+        pass
+
+
+# ---------------- MAIN ----------------
 def main(flet_page: ft.Page):
     flet_page.title = "Inventory Management System"
     flet_page.bgcolor = BACKGROUND_DARK
@@ -50,7 +100,6 @@ def main(flet_page: ft.Page):
     flet_page.window.height = 820
     flet_page.window.min_width = 800
     flet_page.window.min_height = 600
-
 
     flet_page.fonts = {
         "Inter": (
@@ -64,11 +113,24 @@ def main(flet_page: ft.Page):
 
     application_state = {
         "current_screen": "auth",
-        "auth_sub_page": "login",
         "active_route": "dashboard",
     }
 
+    # ---------------- APP ----------------
     def rebuild_app_shell_with_route(new_active_route):
+
+        user = get_session(flet_page, "user")
+
+        if not user:
+            navigate_to_auth_screen("login")
+            return
+
+        role = user.get("role", "Employee")
+        allowed_pages = ROLE_ACCESS.get(role, [])
+
+        # restrict invalid routes
+        if new_active_route not in allowed_pages:
+            new_active_route = "dashboard"
 
         application_state["active_route"] = new_active_route
 
@@ -77,12 +139,14 @@ def main(flet_page: ft.Page):
             build_dashboard_page,
         )
 
+        # ✅ ONLY CHANGE: PASS SESSION DATA
         sidebar_widget = build_sidebar_navigation(
             currently_active_route_key=new_active_route,
             on_navigation_item_click_callback=rebuild_app_shell_with_route,
-            on_logout_click_callback=lambda e: navigate_to_auth_screen("login"),
-        )
+            on_logout_click_callback=lambda e: logout(),
+            user_data=user,
 
+        )
 
         topbar_widget = build_topbar(
             currently_active_route_key=new_active_route
@@ -91,6 +155,7 @@ def main(flet_page: ft.Page):
         active_page_content_widget = active_page_builder_function(flet_page)
 
         flet_page.controls.clear()
+
         flet_page.add(
             ft.Row(
                 [
@@ -115,24 +180,36 @@ def main(flet_page: ft.Page):
 
         flet_page.update()
 
+    # ---------------- LOGOUT ----------------
+    def logout():
+        remove_session(flet_page, "user")
+        navigate_to_auth_screen("login")
+
+    # ---------------- AUTH ----------------
     def navigate_to_auth_screen(auth_sub_page_key):
 
-        application_state["current_screen"] = "auth"
-        application_state["auth_sub_page"] = auth_sub_page_key
+        def handle_auth_success(session_data):
+            set_session(flet_page, "user", session_data)
 
-        def handle_auth_success(e):
-            application_state["current_screen"] = "app"
-            application_state["active_route"] = "dashboard"
+            # instant load
             rebuild_app_shell_with_route("dashboard")
 
         show_auth_screen(
             flet_page=flet_page,
             auth_sub_page=auth_sub_page_key,
             on_login_success_callback=handle_auth_success,
-            on_navigate_callback=navigate_to_auth_screen,
+            on_navigate_callback=lambda x: None,
         )
 
-    navigate_to_auth_screen("login")
+    # ---------------- START ----------------
+    user = get_session(flet_page, "user")
 
+    if user:
+        rebuild_app_shell_with_route("dashboard")
+    else:
+        navigate_to_auth_screen("login")
+
+
+# ---------------- RUN ----------------
 if __name__ == "__main__":
     ft.run(main)

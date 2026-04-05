@@ -38,5 +38,5 @@ first open mongodb compass and create a database in mongodb compass
 - sales
 - suppliers
 
-after creating database and collection go to each collection and click on import json/csv and select inventory folder/directory
+after creating database and collection go to each collection and click on import json/csv and select ''inventory database'' folder/directory
 and import as it is, do it for each collection.
