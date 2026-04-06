@@ -214,7 +214,7 @@ def build_mini_bar_chart(
     bar_column_widgets = []
 
     for individual_value, individual_label in zip(bar_values, bar_labels):
-        bar_fill_ratio = individual_value / maximum_value
+        bar_fill_ratio = individual_value / maximum_value if maximum_value != 0 else 0
         bar_pixel_height = bar_fill_ratio * (chart_height - 30)
 
         bar_column = ft.Column(

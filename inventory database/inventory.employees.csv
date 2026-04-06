@@ -1,0 +1,101 @@
+_id,name,gender,contact,dob,email,password,role,salary,address,performance_score,total_sales,anomaly_flag,employee_id
+69c668ef08e9d8cb13612cf2,Ravi Verma,Male,8449163581,01-01-2000,emp1@mail.com,pass123,Employee,50863,"Street 24, Delhi",90,0,false,emp1
+69c668ef08e9d8cb13612cf3,Saniya Khan,Female,9876543210,12-05-1998,saniya.k@mail.com,a,Admin,85000,"Sector 15, Gurgaon",95,1200,false,emp2
+69c668ef08e9d8cb13612cf4,Suya Sharma,Female,9876543211,22-11-1997,suya.s@mail.com,suya!123,Analyst,62000,"MG Road, Bangalore",88,500,false,emp3
+69c668ef08e9d8cb13612cf5,Narendra Modi,Male,9876543212,17-09-1950,narendra.m@mail.com,nar#456,Admin,120000,"Race Course, Delhi",99,0,false,emp4
+69c668ef08e9d8cb13612cf6,Mohit Gupta,Male,9876543213,05-03-1995,mohit.g@mail.com,mohit%78,Developer,75000,"Vikas Nagar, Lucknow",82,200,false,emp5
+69c668ef08e9d8cb13612cf7,Ajay Devgan,Male,9876543214,02-04-1969,ajay.d@mail.com,ajay^90,Employee,55000,"Juhu, Mumbai",78,150,false,emp6
+69c668ef08e9d8cb13612cf8,Suresh Raina,Male,9876543215,27-11-1986,suresh.r@mail.com,sur&11,HR,68000,"Civil Lines, Kanpur",85,0,false,emp7
+69c668ef08e9d8cb13612cf9,Mahesh Babu,Male,9876543216,09-08-1975,mahesh.b@mail.com,mah*22,Employee,92000,"Banjara Hills, Hyderabad",91,3000,false,emp8
+69c668ef08e9d8cb13612c10,Pinda Singh,Male,9876543217,15-06-1992,pinda.s@mail.com,pin(33,Specialist,58000,"Model Town, Ludhiana",74,450,true,emp9
+69c668ef08e9d8cb13612c11,Jaskirat Singh,Male,9876543218,30-01-1996,jaskirat.s@mail.com,jas)44,Developer,71000,"Sector 22, Chandigarh",89,600,false,emp10
+69c668ef08e9d8cb13612c12,Iqbal Khan,Male,9876543219,10-10-1990,iqbal.k@mail.com,iqb_55,Accountant,64000,"Park Street, Kolkata",80,100,false,emp11
+69c668ef08e9d8cb13612c13,Ananya Pandey,Female,9876543220,30-10-1998,ananya.p@mail.com,ana+66,Employee,45000,"Bandra, Mumbai",70,120,false,emp12
+69c668ef08e9d8cb13612c14,Rahul Dravid,Male,9876543221,11-01-1973,rahul.d@mail.com,rah=77,Director,150000,"Indiranagar, Bangalore",98,0,false,emp13
+69c668ef08e9d8cb13612c15,Sneha Kapoor,Female,9876543222,04-07-1994,sneha.k@mail.com,sne{88,Manager,89000,"Salt Lake, Kolkata",92,800,false,emp14
+69c668ef08e9d8cb13612c16,Vikram Seth,Male,9876543223,20-06-1952,vikram.s@mail.com,vik}99,Lead,95000,"Hauz Khas, Delhi",86,1100,false,emp15
+69c668ef08e9d8cb13612c17,Priya Rai,Female,9876543224,14-02-1999,priya.r@mail.com,pri[00,Employee,52000,"Adyar, Chennai",81,350,false,emp16
+69c668ef08e9d8cb13612c18,Arjun Reddy,Male,9876543225,25-12-1993,arjun.r@mail.com,arj]11,Developer,78000,"Jubilee Hills, Hyderabad",87,700,false,emp17
+69c668ef08e9d8cb13612c19,Kavita Iyer,Female,9876543226,08-03-1991,kavita.i@mail.com,kav|22,Lead,82000,"Koramangala, Bangalore",84,950,false,emp18
+69c668ef08e9d8cb13612c20,Rohan Joshi,Male,9876543227,19-09-1995,rohan.j@mail.com,roh:33,Analyst,60000,"Kothrud, Pune",79,400,false,emp19
+69c668ef08e9d8cb13612c21,Deepika Padukone,Female,9876543228,05-01-1986,deepika.p@mail.com,dee;44,Director,160000,"Worli, Mumbai",96,5000,false,emp20
+69c668ef08e9d8cb13612c22,Virat Kohli,Male,9876543229,05-11-1988,virat.k@mail.com,vir'55,Lead,145000,"DLF Phase 1, Gurgaon",97,0,false,emp21
+69c668ef08e9d8cb13612c23,Pooja Hegde,Female,9876543230,13-10-1990,pooja.h@mail.com,"poo""66",Employee,54000,"Whitefield, Bangalore",77,200,false,emp22
+69c668ef08e9d8cb13612c24,Siddharth Malhotra,Male,9876543231,16-01-1985,sid.m@mail.com,sid<77,Manager,91000,"Andheri, Mumbai",88,1500,false,emp23
+69c668ef08e9d8cb13612c25,Kiara Advani,Female,9876543232,31-07-1992,kiara.a@mail.com,kia>88,Employee,56000,"Colaba, Mumbai",83,400,false,emp24
+69c668ef08e9d8cb13612c26,Amitabh Bachchan,Male,9876543233,11-10-1942,amit.b@mail.com,ami?99,Advisor,200000,"Juhu, Mumbai",100,0,false,emp25
+69c668ef08e9d8cb13612c27,Smriti Irani,Female,9876543234,23-03-1976,smriti.i@mail.com,smr,0,Lead,110000,"Lodhi Road, Delhi",90,0,emp26
+69c668ef08e9d8cb13612c28,Ranbir Kapoor,Male,9876543235,28-09-1982,ranbir.k@mail.com,ran.11,Manager,98000,"Pali Hill, Mumbai",85,2200,false,emp27
+69c668ef08e9d8cb13612c29,Alia Bhatt,Female,9876543236,15-03-1993,alia.b@mail.com,ali/22,Employee,60000,"Juhu, Mumbai",82,600,false,emp28
+69c668ef08e9d8cb13612c30,Varun Dhawan,Male,9876543237,24-04-1987,varun.d@mail.com,var~33,Employee,58000,"Juhu, Mumbai",76,450,false,emp29
+69c668ef08e9d8cb13612c31,Shraddha Kapoor,Female,9876543238,03-03-1987,shraddha.k@mail.com,shr`44,Analyst,65000,"Juhu, Mumbai",84,300,false,emp30
+69c668ef08e9d8cb13612c32,Akshay Kumar,Male,9876543239,09-09-1967,akshay.k@mail.com,aks-55,Lead,130000,"Juhu, Mumbai",94,4000,false,emp31
+69c668ef08e9d8cb13612c33,Kriti Sanon,Female,9876543240,27-07-1990,kriti.s@mail.com,kri_66,Employee,57000,"Patparganj, Delhi",80,150,false,emp32
+69c668ef08e9d8cb13612c34,Kartik Aaryan,Male,9876543241,22-11-1990,kartik.a@mail.com,kar+77,Employee,59000,"Gwalior, MP",79,500,false,emp33
+69c668ef08e9d8cb13612c35,Sara Ali Khan,Female,9876543242,12-08-1995,sara.k@mail.com,sar=88,Analyst,61000,"Pataudi, Haryana",81,250,false,emp34
+69c668ef08e9d8cb13612c36,Ayushmann Khurrana,Male,9876543243,14-09-1984,ayush.k@mail.com,ayu{99,Manager,87000,"Sector 8, Chandigarh",93,1800,false,emp35
+69c668ef08e9d8cb13612c37,Taapsee Pannu,Female,9876543244,01-08-1987,taapsee.p@mail.com,taa}00,Employee,63000,"Rohini, Delhi",86,900,false,emp36
+69c668ef08e9d8cb13612c38,Rajkummar Rao,Male,9876543245,31-08-1984,raj.r@mail.com,raj[11,Specialist,72000,"Gurgaon, Haryana",89,1100,false,emp37
+69c668ef08e9d8cb13612c39,Bhumi Pednekar,Female,9876543246,18-07-1989,bhumi.p@mail.com,bhu]22,Employee,55000,"Peddar Road, Mumbai",82,400,false,emp38
+69c668ef08e9d8cb13612c40,Vicky Kaushal,Male,9876543247,16-05-1988,vicky.k@mail.com,vic|33,Manager,94000,"Andheri, Mumbai",91,2100,false,emp39
+69c668ef08e9d8cb13612c41,Katrina Kaif,Female,9876543248,16-07-1983,katrina.k@mail.com,kat:44,Lead,115000,"Bandra, Mumbai",88,0,false,emp40
+69c668ef08e9d8cb13612c42,Pankaj Tripathi,Male,9876543249,05-09-1976,pankaj.t@mail.com,pan;55,Expert,105000,"Gopalganj, Bihar",97,300,false,emp41
+69c668ef08e9d8cb13612c43,Vidya Balan,Female,9876543250,01-01-1979,vidya.b@mail.com,vid'66,Manager,96000,"Chembur, Mumbai",92,1500,false,emp42
+69c668ef08e9d8cb13612c44,Manoj Bajpayee,Male,9876543251,23-04-1969,manoj.b@mail.com,"man""77",Expert,108000,"Belwa, Bihar",96,500,false,emp43
+69c668ef08e9d8cb13612c45,Radhika Apte,Female,9876543252,07-09-1985,radhika.a@mail.com,rad<88,Specialist,76000,"Pune, Maharashtra",87,800,false,emp44
+69c668ef08e9d8cb13612c46,Nawazuddin Siddiqui,Male,9876543253,19-05-1974,nawaz.s@mail.com,naw>99,Expert,102000,"Budhana, UP",95,200,false,emp45
+69c668ef08e9d8cb13612c47,Sayani Gupta,Female,9876543254,09-10-1985,sayani.g@mail.com,say?00,Employee,58000,"Kolkata, WB",81,300,false,emp46
+69c668ef08e9d8cb13612c48,Vijay Sethupathi,Male,9876543255,16-01-1978,vijay.s@mail.com,vij,11,Specialist,99000,"Chennai, TN",94,2500,emp47
+69c668ef08e9d8cb13612c49,Sobhita Dhulipala,Female,9876543256,31-05-1992,sobhita.d@mail.com,sob.22,Analyst,67000,"Vizag, AP",85,450,false,emp48
+69c668ef08e9d8cb13612c50,Dulquer Salmaan,Male,9876543257,28-07-1986,dq.s@mail.com,dul/33,Lead,112000,"Kochi, Kerala",93,3200,false,emp49
+69c668ef08e9d8cb13612c51,Parvathy Thiruvothu,Female,9876543258,07-04-1988,parvathy.t@mail.com,par~44,Lead,108000,"Kozhikode, Kerala",92,600,false,emp50
+69c668ef08e9d8cb13612c52,Fahadh Faasil,Male,9876543259,08-08-1982,fahadh.f@mail.com,fah`55,Expert,118000,"Alappuzha, Kerala",98,1200,false,emp51
+69c668ef08e9d8cb13612c53,Konkona Sen Sharma,Female,9876543260,03-12-1979,konkona.s@mail.com,kon-66,Manager,94000,"Kolkata, WB",91,0,false,emp52
+69c668ef08e9d8cb13612c54,Prithviraj Sukumaran,Male,9876543261,16-10-1982,prithvi.s@mail.com,pri_77,Director,155000,"Kochi, Kerala",97,4500,false,emp53
+69c668ef08e9d8cb13612c55,Nimisha Sajayan,Female,9876543262,04-01-1997,nimisha.s@mail.com,nim+88,Employee,53000,"Mumbai, Maharashtra",84,200,false,emp54
+69c668ef08e9d8cb13612c56,Ranveer Singh,Male,9876543263,06-07-1985,ranveer.s@mail.com,ran=99,Lead,125000,"Bandra, Mumbai",89,5500,false,emp55
+69c668ef08e9d8cb13612c57,Anushka Sharma,Female,9876543264,01-05-1988,anushka.s@mail.com,anu{00,Lead,120000,"Bangalore, KA",90,0,false,emp56
+69c668ef08e9d8cb13612c58,Shah Rukh Khan,Male,9876543265,02-11-1965,srk.k@mail.com,srk}11,Director,250000,"Mannat, Mumbai",100,10000,false,emp57
+69c668ef08e9d8cb13612c59,Kajol Devgan,Female,9876543266,05-08-1974,kajol.d@mail.com,kaj[22,Lead,110000,"Juhu, Mumbai",88,500,false,emp58
+69c668ef08e9d8cb13612c60,Salman Khan,Male,9876543267,27-12-1965,salman.k@mail.com,sal]33,Director,240000,"Galaxy, Mumbai",95,8000,false,emp59
+69c668ef08e9d8cb13612c61,Rani Mukerji,Female,9876543268,21-03-1978,rani.m@mail.com,ran|44,Manager,98000,"Juhu, Mumbai",91,0,false,emp60
+69c668ef08e9d8cb13612c62,Aamir Khan,Male,9876543269,14-03-1965,aamir.k@mail.com,aam:55,Expert,180000,"Pali Hill, Mumbai",99,1500,false,emp61
+69c668ef08e9d8cb13612c63,Juhi Chawla,Female,9876543270,13-11-1967,juhi.c@mail.com,juh;66,Lead,105000,"Malabar Hill, Mumbai",87,400,false,emp62
+69c668ef08e9d8cb13612c64,Saif Ali Khan,Male,9876543271,16-08-1970,saif.k@mail.com,sai'77,Manager,115000,"Bandra, Mumbai",89,900,false,emp63
+69c668ef08e9d8cb13612c65,Kareena Kapoor,Female,9876543272,21-09-1980,kareena.k@mail.com,"kar""88",Lead,120000,"Bandra, Mumbai",90,1200,false,emp64
+69c668ef08e9d8cb13612c66,Hrithik Roshan,Male,9876543273,10-01-1974,hrithik.r@mail.com,hri<99,Director,175000,"Juhu, Mumbai",96,3000,false,emp65
+69c668ef08e9d8cb13612c67,Sushmita Sen,Female,9876543274,19-11-1975,sush.s@mail.com,sus>00,Lead,110000,"Bandra, Mumbai",94,0,false,emp66
+69c668ef08e9d8cb13612c68,Abhishek Bachchan,Male,9876543275,05-02-1976,abhishek.b@mail.com,abh?11,Manager,92000,"Juhu, Mumbai",82,600,false,emp67
+69c668ef08e9d8cb13612c69,Aishwarya Rai,Female,9876543276,01-11-1973,aishwarya.r@mail.com,ais,22,Director,180000,"Juhu, Mumbai",98,2000,emp68
+69c668ef08e9d8cb13612c70,John Abraham,Male,9876543277,17-12-1972,john.a@mail.com,joh.33,Manager,95000,"Bandra, Mumbai",85,1500,false,emp69
+69c668ef08e9d8cb13612c71,Bipasha Basu,Female,9876543278,07-01-1979,bipasha.b@mail.com,bip/44,Lead,100000,"Bandra, Mumbai",84,800,false,emp70
+69c668ef08e9d8cb13612c72,Suniel Shetty,Male,9876543279,11-08-1961,suniel.s@mail.com,sun~55,Expert,110000,"Altamount Road, Mumbai",86,1200,false,emp71
+69c668ef08e9d8cb13612c73,Raveena Tandon,Female,9876543280,26-10-1974,raveena.t@mail.com,rav`66,Lead,98000,"Juhu, Mumbai",83,400,false,emp72
+69c668ef08e9d8cb13612c74,Bobby Deol,Male,9876543281,27-01-1969,bobby.d@mail.com,bob-77,Employee,65000,"Vile Parle, Mumbai",75,300,false,emp73
+69c668ef08e9d8cb13612c75,Karisma Kapoor,Female,9876543282,25-06-1974,karisma.k@mail.com,kar_88,Lead,102000,"Bandra, Mumbai",87,0,false,emp74
+69c668ef08e9d8cb13612c76,Govinda Ahuja,Male,9876543283,21-12-1963,govinda.a@mail.com,gov+99,Manager,90000,"Juhu, Mumbai",81,1100,false,emp75
+69c668ef08e9d8cb13612c77,Madhuri Dixit,Female,9876543284,15-05-1967,madhuri.d@mail.com,mad=00,Expert,140000,"Palatial, Mumbai",99,0,false,emp76
+69c668ef08e9d8cb13612c78,Anil Kapoor,Male,9876543285,24-12-1956,anil.k@mail.com,ani{11,Director,160000,"Juhu, Mumbai",95,2500,false,emp77
+69c668ef08e9d8cb13612c79,Sridevi Kapoor,Female,9876543286,13-08-1963,sridevi.k@mail.com,sri}22,Expert,150000,"Chennai, TN",100,0,false,emp78
+69c668ef08e9d8cb13612c80,Sanjay Dutt,Male,9876543287,29-07-1959,sanjay.d@mail.com,san[33,Lead,115000,"Pali Hill, Mumbai",82,700,true,emp79
+69c668ef08e9d8cb13612c81,Rekha Ganesan,Female,9876543288,10-10-1954,rekha.g@mail.com,rek]44,Advisor,180000,"Bandra, Mumbai",97,0,false,emp80
+69c668ef08e9d8cb13612c82,Jackie Shroff,Male,9876543289,01-02-1957,jackie.s@mail.com,jac|55,Lead,105000,"Walkeshwar, Mumbai",84,900,false,emp81
+69c668ef08e9d8cb13612c83,Hema Malini,Female,9876543290,16-10-1948,hema.m@mail.com,hem:66,Advisor,170000,"Juhu, Mumbai",96,0,false,emp82
+69c668ef08e9d8cb13612c84,Dharmendra Deol,Male,9876543291,08-12-1935,dharam.d@mail.com,dha;77,Expert,140000,"Vile Parle, Mumbai",90,1200,false,emp83
+69c668ef08e9d8cb13612c85,Sharmila Tagore,Female,9876543292,08-12-1944,sharmila.t@mail.com,sha'88,Advisor,160000,"Pataudi, Haryana",95,0,false,emp84
+69c668ef08e9d8cb13612c86,Rishi Kapoor,Male,9876543293,04-09-1952,rishi.k@mail.com,"ris""99",Director,155000,"Pali Hill, Mumbai",93,1000,false,emp85
+69c668ef08e9d8cb13612c87,Neetu Singh,Female,9876543294,08-07-1958,neetu.s@mail.com,nee<00,Manager,94000,"Pali Hill, Mumbai",88,0,false,emp86
+69c668ef08e9d8cb13612c88,Jeetendra Kapoor,Male,9876543295,07-04-1942,jeetu.k@mail.com,jee>11,Advisor,145000,"Colaba, Mumbai",89,500,false,emp87
+69c668ef08e9d8cb13612c89,Saira Banu,Female,9876543296,23-08-1944,saira.b@mail.com,sai?22,Advisor,135000,"Bandra, Mumbai",87,0,false,emp88
+69c668ef08e9d8cb13612c90,Dilip Kumar,Male,9876543297,11-12-1922,dilip.k@mail.com,dil,33,Director,200000,"Bandra, Mumbai",100,0,emp89
+69c668ef08e9d8cb13612c91,Waheeda Rehman,Female,9876543298,03-02-1938,waheeda.r@mail.com,wah.44,Advisor,130000,"Bandra, Mumbai",96,0,false,emp90
+69c668ef08e9d8cb13612c92,Vinod Khanna,Male,9876543299,06-10-1946,vinod.k@mail.com,vin/55,Expert,125000,"Malabar Hill, Mumbai",91,400,false,emp91
+69c668ef08e9d8cb13612c93,Zeenat Aman,Female,9876543300,19-11-1951,zeenat.a@mail.com,zee~66,Lead,105000,"Worli, Mumbai",86,300,false,emp92
+69c668ef08e9d8cb13612c94,Shashi Kapoor,Male,9876543301,18-03-1938,shashi.k@mail.com,sha`77,Director,140000,"Juhu, Mumbai",94,800,false,emp93
+69c668ef08e9d8cb13612c95,Parveen Babi,Female,9876543302,04-04-1949,parveen.b@mail.com,par-88,Lead,98000,"Juhu, Mumbai",85,0,true,emp94
+69c668ef08e9d8cb13612c96,Rajesh Khanna,Male,9876543303,29-12-1942,rajesh.k@mail.com,raj_99,Director,190000,"Carter Road, Mumbai",99,0,false,emp95
+69c668ef08e9d8cb13612c97,Dimple Kapadia,Female,9876543304,08-06-1957,dimple.k@mail.com,dim+00,Lead,112000,"Juhu, Mumbai",90,200,false,emp96
+69c668ef08e9d8cb13612c98,Nana Patekar,Male,9876543305,01-01-1951,nana.p@mail.com,nan=11,Expert,115000,"Mahim, Mumbai",93,0,false,emp97
+69c668ef08e9d8cb13612c99,Tabu Hashmi,Female,9876543306,04-11-1971,tabu.h@mail.com,tab{22,Expert,122000,"Andheri, Mumbai",95,400,false,emp98
+69c668ef08e9d8cb13612d00,Irrfan Khan,Male,9876543307,07-01-1967,irrfan.k@mail.com,irr}33,Director,185000,"Versova, Mumbai",100,500,false,emp99
+69c668ef08e9d8cb13612d01,Juhi Chawla,Female,9876543308,13-11-1967,juhi.c2@mail.com,juh[44,Manager,96000,"Malabar Hill, Mumbai",89,700,false,emp100

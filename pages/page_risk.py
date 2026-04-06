@@ -14,13 +14,14 @@ BORDER = "#334155"
 ACCENT = "#38BDF8"
 
 client = MongoClient("mongodb://localhost:27017/")
-clean_db = client["inventory_ai_clean_db"]
-db = client["inventory_full_system"]
+clean_db = client["inventoryai"]
+db = client["inventoryai"]
 
 collection = clean_db["cleaned_inventory"]
 anomaly_collection = db["anomalies"]
 
 
+# ---------------- load data ----------------
 def load_clean_data():
     rows = list(collection.find({}, {"_id": 0}))
     if not rows:
@@ -28,13 +29,19 @@ def load_clean_data():
 
     df = pd.DataFrame(rows)
 
-    if "sale_date" in df.columns:
-        df["sale_date"] = pd.to_datetime(df["sale_date"], errors="coerce")
+
+    if "date" in df.columns:
+        df["sale_date"] = pd.to_datetime(df["date"], errors="coerce")
+    elif "order_date" in df.columns:
+        df["sale_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+
 
     cols = [
-        "quantity", "revenue", "discount", "current_stock", "stock_level",
-        "rolling_demand", "stock_risk", "profit", "profit_margin",
-        "cost_price", "selling_price", "turnover_ratio", "lead_time_days"
+        "quantity", "total", "discount",
+        "current_stock", "safety_stock", "reorder_point",
+        "turnover_ratio", "lead_time_days",
+        "profit", "cost_price", "selling_price",
+        "risk_score"
     ]
 
     for c in cols:
@@ -44,46 +51,57 @@ def load_clean_data():
     return df
 
 
+#----------------------------risk engine----------------------------
 class RiskEngine:
+
     @staticmethod
     def safe(v):
         if v is None or pd.isna(v) or np.isinf(v):
             return 0
         return float(v)
 
-    @staticmethod
-    def stockout_risk(stock, demand):
-        r = demand / max(stock, 1)
-        s = min(int(r * 100), 100)
-        return ("High 🔴", s) if s > 80 else ("Medium 🟡", s) if s > 50 else ("Low 🟢", s)
 
+    @staticmethod
+    def stockout_risk(stock, demand, safety, reorder):
+        risk = (demand - stock) + reorder - safety
+        score = min(max(int(risk * 2), 0), 100)
+        return ("High 🔴", score) if score > 70 else ("Medium 🟡", score) if score > 40 else ("Low 🟢", score)
+
+    #overstock
     @staticmethod
     def overstock_risk(stock, demand):
-        r = stock / max(demand, 1)
-        s = min(int(r * 20), 100)
-        return ("High 🔴", s) if s > 80 else ("Medium 🟡", s) if s > 50 else ("Low 🟢", s)
+        ratio = stock / max(demand, 1)
+        score = min(int(ratio * 25), 100)
+        return ("High 🔴", score) if score > 70 else ("Medium 🟡", score) if score > 40 else ("Low 🟢", score)
 
+    #profit
     @staticmethod
-    def profit_risk(margin):
-        return ("High 🔴", 90) if margin < 0.2 else ("Medium 🟡", 60) if margin < 0.4 else ("Low 🟢", 30)
+    def profit_risk(profit, revenue):
+        margin = profit / max(revenue, 1)
+        score = 100 - min(int(margin * 100), 100)
+        return ("High 🔴", score) if score > 70 else ("Medium 🟡", score) if score > 40 else ("Low 🟢", score)
 
+    #supplier
     @staticmethod
     def supplier_risk(lead):
-        s = min(int(lead * 4), 100)
-        return ("High 🔴", s) if s > 70 else ("Medium 🟡", s) if s > 40 else ("Low 🟢", s)
+        score = min(int(lead * 5), 100)
+        return ("High 🔴", score) if score > 70 else ("Medium 🟡", score) if score > 40 else ("Low 🟢", score)
 
+    #discount
     @staticmethod
     def discount_risk(disc):
-        s = min(int(disc * 3), 100)
-        return ("High 🔴", s) if s > 70 else ("Medium 🟡", s) if s > 40 else ("Low 🟢", s)
+        score = min(int(disc * 4), 100)
+        return ("High 🔴", score) if score > 70 else ("Medium 🟡", score) if score > 40 else ("Low 🟢", score)
 
+    #anomly
     @staticmethod
     def anomaly_detection(hist):
         if len(hist) < 10:
             return []
-        model = IsolationForest(contamination=0.08)
+        model = IsolationForest(contamination=0.08, random_state=42)
         pred = model.fit_predict(np.array(hist).reshape(-1, 1))
         return [i for i, p in enumerate(pred) if p == -1]
+
 
     @staticmethod
     def forecast_accuracy(vals):
@@ -94,7 +112,6 @@ class RiskEngine:
         pred[0] = arr.mean()
         mape = mean_absolute_percentage_error(arr, pred)
         return round((1 - mape) * 100, 2)
-
 
 def save_anomaly(pid, qty, row):
     anomaly_collection.insert_one({
@@ -107,6 +124,7 @@ def save_anomaly(pid, qty, row):
     })
 
 
+# ---------------- UI ----------------
 class RiskCard(ft.Container):
     def __init__(self, title, level, score, icon):
         super().__init__(
@@ -127,6 +145,7 @@ class RiskCard(ft.Container):
         )
 
 
+# ----------------main----------------
 def build_risk_page(page: ft.Page):
     df = load_clean_data()
 
@@ -162,17 +181,22 @@ def build_risk_page(page: ft.Page):
         pdf = df[df["product_id"] == pid]
         latest = pdf.iloc[-1]
 
-        stock = latest.get("stock_level", 0)
-        demand = latest.get("rolling_demand", 0)
+        stock = latest.get("current_stock", 0)
+        safety = latest.get("safety_stock", 0)
+        reorder = latest.get("reorder_point", 0)
+
+        demand = latest.get("quantity", 0)
         discount = latest.get("discount", 0)
         lead = latest.get("lead_time_days", 0)
-        margin = latest.get("profit_margin", 0)
+        profit = latest.get("profit", 0)
+        revenue = latest.get("total", 0)
 
         hist = pdf["quantity"].tolist()
 
-        r1 = RiskEngine.stockout_risk(stock, demand)
+        # ---------------- RISK CALC ----------------
+        r1 = RiskEngine.stockout_risk(stock, demand, safety, reorder)
         r2 = RiskEngine.overstock_risk(stock, demand)
-        r3 = RiskEngine.profit_risk(margin)
+        r3 = RiskEngine.profit_risk(profit, revenue)
         r4 = RiskEngine.supplier_risk(lead)
         r5 = RiskEngine.discount_risk(discount)
 
@@ -191,12 +215,14 @@ def build_risk_page(page: ft.Page):
             ft.Container(c, col={"sm": 6, "md": 4, "xl": 3}) for c in cards
         ])
 
-        summary = f"""AI SUMMARY:
+        summary = f"""
+AI SUMMARY:
 
 • Forecast Accuracy: {acc if acc else "N/A"}%
+• Stock Status: {"CRITICAL" if stock < safety else "OK"}
 • Demand Trend: {"High" if demand > stock else "Stable"}
-• Risk: {r1[0]}, {r2[0]}
-• Action: {"Increase stock" if demand > stock else "Reduce stock"}
+• Risk Level: {r1[0]}, {r2[0]}
+• Action: {"Increase stock immediately" if demand > stock else "Optimize inventory"}
 """
         insights.content = ft.Text(summary, color=TEXT)
 
@@ -208,12 +234,8 @@ def build_risk_page(page: ft.Page):
             date = row.get("sale_date", "Unknown")
             inv = row.get("invoice_number", "N/A")
 
-            if qty > avg:
-                reason = "Demand spike detected"
-                action = "Increase stock to meet demand"
-            else:
-                reason = "Demand drop detected"
-                action = "Review sales and reduce inventory"
+            reason = "Demand spike" if qty > avg else "Demand drop"
+            action = "Increase stock" if qty > avg else "Reduce stock"
 
             save_anomaly(pid, qty, row)
 

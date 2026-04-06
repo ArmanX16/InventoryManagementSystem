@@ -11,11 +11,13 @@ from sklearn.ensemble import RandomForestRegressor
 import xgboost as xgb
 from prophet import Prophet
 
+# ---------------- DataBase ----------------
 client = MongoClient("mongodb://localhost:27017/")
-db = client["inventory_ai_clean_db"]
+db = client["inventoryai"]
 collection = db["cleaned_inventory"]
 
 
+# ---------------- Image Encodings----------------
 def fig_to_base64(fig):
     buffer = BytesIO()
     fig.savefig(buffer, format="png", bbox_inches="tight")
@@ -26,6 +28,7 @@ def fig_to_base64(fig):
     return encoded
 
 
+# ---------------- Data load ----------------
 def load_product_data(pid):
     rows = list(collection.find({"product_id": pid}, {"_id": 0}))
     df = pd.DataFrame(rows)
@@ -33,8 +36,24 @@ def load_product_data(pid):
     if df.empty:
         return df
 
-    df["sale_date"] = pd.to_datetime(df["sale_date"])
+    #-------------------------Date----------------------
+    if "date" in df.columns:
+        df["sale_date"] = pd.to_datetime(df["date"], errors="coerce")
+    elif "order_date" in df.columns:
+        df["sale_date"] = pd.to_datetime(df["order_date"], errors="coerce")
+    else:
+        df["sale_date"] = pd.to_datetime(df.get("created_at"), errors="coerce")
+
     df = df.sort_values("sale_date")
+
+
+    df["quantity"] = pd.to_numeric(df.get("quantity", 0), errors="coerce").fillna(0)
+    df["discount"] = pd.to_numeric(df.get("discount", 0), errors="coerce").fillna(0)
+    df["current_stock"] = pd.to_numeric(df.get("current_stock", 0), errors="coerce").fillna(0)
+    df["profit"] = pd.to_numeric(df.get("profit", 0), errors="coerce").fillna(0)
+    df["turnover_ratio"] = pd.to_numeric(df.get("turnover_ratio", 0), errors="coerce").fillna(0)
+    df["risk_score"] = pd.to_numeric(df.get("risk_score", 0), errors="coerce").fillna(0)
+
 
     df["lag_1"] = df["quantity"].shift(1)
     df["lag_7"] = df["quantity"].shift(7)
@@ -46,65 +65,76 @@ def load_product_data(pid):
     return df
 
 
+# ---------------- Random forest model ----------------
 def rf_model(df, days):
-    f = ["lag_1","lag_7","rolling_7","rolling_30","discount","stock_level","profit_margin",
-         "month","weekday","weekend","turnover_ratio","risk_score","stock_risk"]
+    features = [
+        "lag_1", "lag_7", "rolling_7", "rolling_30",
+        "discount", "current_stock", "profit",
+        "turnover_ratio", "risk_score"
+    ]
 
-    X, y = df[f], df["quantity"]
-    split = int(len(df) * 0.8)
+    X, y = df[features], df["quantity"]
+    split = max(int(len(df) * 0.8), 1)
 
-    m = RandomForestRegressor(n_estimators=400, random_state=42)
-    m.fit(X[:split], y[:split])
+    model = RandomForestRegressor(n_estimators=400, random_state=42)
+    model.fit(X[:split], y[:split])
 
-    preds = m.predict(X[split:])
-    mape = mean_absolute_percentage_error(y[split:], preds)
-    rmse = np.sqrt(mean_squared_error(y[split:], preds))
+    preds = model.predict(X[split:])
+    mape = mean_absolute_percentage_error(y[split:], preds) if len(preds) > 0 else 0
+    rmse = np.sqrt(mean_squared_error(y[split:], preds)) if len(preds) > 0 else 0
 
     row = X.iloc[-1:].copy()
-    out = []
+    output = []
 
     for _ in range(days):
-        p = m.predict(row)[0]
-        out.append(p)
+        p = model.predict(row)[0]
+        output.append(p)
         row["lag_1"] = p
+        row["rolling_7"] = np.mean(output[-7:])
 
-    return out, mape, rmse
+    return output, mape, rmse
 
 
+# ---------------- xgboost----------------
 def xgb_model(df, days):
-    f = ["lag_1","lag_7","rolling_7","rolling_30","discount","stock_level","profit_margin",
-         "month","weekday","weekend","turnover_ratio","risk_score"]
+    features = [
+        "lag_1", "lag_7", "rolling_7", "rolling_30",
+        "discount", "current_stock",
+        "profit", "turnover_ratio", "risk_score"
+    ]
 
-    X, y = df[f], df["quantity"]
-    split = int(len(df) * 0.8)
+    X, y = df[features], df["quantity"]
+    split = max(int(len(df) * 0.8), 1)
 
-    m = xgb.XGBRegressor(n_estimators=300, learning_rate=0.05)
-    m.fit(X[:split], y[:split])
+    model = xgb.XGBRegressor(n_estimators=300, learning_rate=0.05)
+    model.fit(X[:split], y[:split])
 
-    preds = m.predict(X[split:])
-    mape = mean_absolute_percentage_error(y[split:], preds)
-    rmse = np.sqrt(mean_squared_error(y[split:], preds))
+    preds = model.predict(X[split:])
+    mape = mean_absolute_percentage_error(y[split:], preds) if len(preds) > 0 else 0
+    rmse = np.sqrt(mean_squared_error(y[split:], preds)) if len(preds) > 0 else 0
 
     row = X.iloc[-1:].copy()
-    out = []
+    output = []
 
     for _ in range(days):
-        p = m.predict(row)[0]
-        out.append(p)
+        p = model.predict(row)[0]
+        output.append(p)
         row["lag_1"] = p
+        row["rolling_7"] = np.mean(output[-7:])
 
-    return out, mape, rmse
+    return output, mape, rmse
 
 
+# ---------------- Prophet----------------
 def prophet_model(df, days):
-    p_df = df[["sale_date", "quantity"]]
+    p_df = df[["sale_date", "quantity"]].dropna()
     p_df.columns = ["ds", "y"]
 
-    m = Prophet()
-    m.fit(p_df)
+    model = Prophet()
+    model.fit(p_df)
 
-    future = m.make_future_dataframe(periods=days)
-    forecast = m.predict(future)
+    future = model.make_future_dataframe(periods=days)
+    forecast = model.predict(future)
 
     yhat = forecast["yhat"].values[-days:]
     lower = forecast["yhat_lower"].values[-days:]
@@ -116,6 +146,7 @@ def prophet_model(df, days):
     return yhat, lower, upper, mape, rmse
 
 
+# ---------------- UI----------------------
 def stat_card(t, v):
     return ft.Container(
         width=230,
@@ -130,6 +161,7 @@ def stat_card(t, v):
     )
 
 
+# ---------------- Main ----------------
 def build_forecast_page(page: ft.Page):
     chart_box = ft.Container()
 
@@ -189,33 +221,39 @@ def build_forecast_page(page: ft.Page):
             fc, mape, rmse = rf_model(df, days)
             low = np.array(fc) * 0.9
             high = np.array(fc) * 1.1
+
         elif model == "XGBoost":
             fc, mape, rmse = xgb_model(df, days)
             low = np.array(fc) * 0.9
             high = np.array(fc) * 1.1
+
         else:
             fc, low, high, mape, rmse = prophet_model(df, days)
 
         total = int(sum(fc))
-        price = df["selling_price"].iloc[-1]
+
+        price = df["selling_price"].iloc[-1] if "selling_price" in df else 1000
         revenue = int(total * price)
 
+        # UPDATE UI
         c1.content.controls[1].value = str(total)
-        c2.content.controls[1].value = str(int(total * 1.25))
-        c3.content.controls[1].value = f"{(1-mape)*100:.1f}%"
+        c2.content.controls[1].value = str(int(total * 1.2))
+        c3.content.controls[1].value = f"{max(0, (1 - mape) * 100):.1f}%"
         c4.content.controls[1].value = str(revenue)
 
         trend = "increasing" if fc[-1] > fc[0] else "stable or decreasing"
 
         insight.value = (
-            f"Forecast indicates {total} units may be sold in next {days} days. "
-            f"Demand trend appears {trend}. "
-            f"Recommended to keep stock around {int(total*1.25)} units. "
-            f"Estimated revenue could reach ₹{revenue}."
+            f"Forecast: {total} units in next {days} days. "
+            f"Trend: {trend}. "
+            f"Recommended stock: {int(total * 1.2)} units. "
+            f"Revenue estimate: ₹{revenue}."
         )
 
         fig, ax = plt.subplots()
         ax.plot(fc)
+        ax.set_title("Demand Forecast")
+
         img = fig_to_base64(fig)
 
         chart_box.content = ft.Image(
@@ -231,9 +269,12 @@ def build_forecast_page(page: ft.Page):
         padding=20,
         content=ft.Column(
             [
-                ft.Text("AI Demand Forecast Intelligence", size=32, weight="bold", color="white"),
+                ft.Text("AI Demand Forecast", size=32, weight="bold", color="white"),
 
-                ft.Row([dd_product, dd_model, dd_days, ft.ElevatedButton("Run Forecast", on_click=run)], wrap=True),
+                ft.Row(
+                    [dd_product, dd_model, dd_days, ft.ElevatedButton("Run Forecast", on_click=run)],
+                    wrap=True
+                ),
 
                 ft.Row([c1, c2, c3, c4], wrap=True),
 

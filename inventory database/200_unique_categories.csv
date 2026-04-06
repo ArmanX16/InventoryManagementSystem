@@ -1,0 +1,201 @@
+_id,name,description,created_at
+cat1,Mobile,Mobile products category,2026-03-27
+cat2,Washing Machine,Washing Machine products category,2026-03-27
+cat3,Refrigerator,Refrigerator products category,2026-03-27
+cat4,Air Conditioner,Air Conditioner products category,2026-03-27
+cat5,Television,Television products category,2026-03-27
+cat6,Air Cooler,Air Cooler products category,2026-03-27
+cat7,Blender,Blender products category,2026-03-27
+cat8,Laptop,Laptop products category,2026-03-27
+cat9,Tablet,Tablet products category,2026-03-27
+cat10,Headphones,Headphones products category,2026-03-27
+cat11,Smart Watch,Smart Watch products category,2026-03-27
+cat12,Camera,Camera products category,2026-03-27
+cat13,Printer,Printer products category,2026-03-27
+cat14,Scanner,Scanner products category,2026-03-27
+cat15,Microwave,Microwave products category,2026-03-27
+cat16,Oven,Oven products category,2026-03-27
+cat17,Toaster,Toaster products category,2026-03-27
+cat18,Mixer Grinder,Mixer Grinder products category,2026-03-27
+cat19,Water Purifier,Water Purifier products category,2026-03-27
+cat20,Geyser,Geyser products category,2026-03-27
+cat21,Fan,Fan products category,2026-03-27
+cat22,Heater,Heater products category,2026-03-27
+cat23,Iron,Iron products category,2026-03-27
+cat24,Vacuum Cleaner,Vacuum Cleaner products category,2026-03-27
+cat25,Dishwasher,Dishwasher products category,2026-03-27
+cat26,Router,Router products category,2026-03-27
+cat27,Modem,Modem products category,2026-03-27
+cat28,Speaker,Speaker products category,2026-03-27
+cat29,Soundbar,Soundbar products category,2026-03-27
+cat30,Projector,Projector products category,2026-03-27
+cat31,Gaming Console,Gaming Console products category,2026-03-27
+cat32,Keyboard,Keyboard products category,2026-03-27
+cat33,Mouse,Mouse products category,2026-03-27
+cat34,Monitor,Monitor products category,2026-03-27
+cat35,Hard Drive,Hard Drive products category,2026-03-27
+cat36,SSD,SSD products category,2026-03-27
+cat37,Pendrive,Pendrive products category,2026-03-27
+cat38,Power Bank,Power Bank products category,2026-03-27
+cat39,Charger,Charger products category,2026-03-27
+cat40,Extension Board,Extension Board products category,2026-03-27
+cat41,Inverter,Inverter products category,2026-03-27
+cat42,Battery,Battery products category,2026-03-27
+cat43,Solar Panel,Solar Panel products category,2026-03-27
+cat44,LED Bulb,LED Bulb products category,2026-03-27
+cat45,Tube Light,Tube Light products category,2026-03-27
+cat46,Ceiling Light,Ceiling Light products category,2026-03-27
+cat47,Wall Light,Wall Light products category,2026-03-27
+cat48,Table Lamp,Table Lamp products category,2026-03-27
+cat49,Emergency Light,Emergency Light products category,2026-03-27
+cat50,CCTV Camera,CCTV Camera products category,2026-03-27
+cat51,Door Lock,Door Lock products category,2026-03-27
+cat52,Smart Lock,Smart Lock products category,2026-03-27
+cat53,Doorbell,Doorbell products category,2026-03-27
+cat54,Curtains,Curtains products category,2026-03-27
+cat55,Sofa,Sofa products category,2026-03-27
+cat56,Bed,Bed products category,2026-03-27
+cat57,Mattress,Mattress products category,2026-03-27
+cat58,Pillow,Pillow products category,2026-03-27
+cat59,Blanket,Blanket products category,2026-03-27
+cat60,Wardrobe,Wardrobe products category,2026-03-27
+cat61,Dining Table,Dining Table products category,2026-03-27
+cat62,Chair,Chair products category,2026-03-27
+cat63,Study Table,Study Table products category,2026-03-27
+cat64,Bookshelf,Bookshelf products category,2026-03-27
+cat65,Cupboard,Cupboard products category,2026-03-27
+cat66,Dressing Table,Dressing Table products category,2026-03-27
+cat67,Mirror,Mirror products category,2026-03-27
+cat68,Carpet,Carpet products category,2026-03-27
+cat69,Doormat,Doormat products category,2026-03-27
+cat70,Clock,Clock products category,2026-03-27
+cat71,Watch,Watch products category,2026-03-27
+cat72,Shoes,Shoes products category,2026-03-27
+cat73,Sandals,Sandals products category,2026-03-27
+cat74,Slippers,Slippers products category,2026-03-27
+cat75,T-Shirt,T-Shirt products category,2026-03-27
+cat76,Shirt,Shirt products category,2026-03-27
+cat77,Jeans,Jeans products category,2026-03-27
+cat78,Jacket,Jacket products category,2026-03-27
+cat79,Sweater,Sweater products category,2026-03-27
+cat80,Shorts,Shorts products category,2026-03-27
+cat81,Cap,Cap products category,2026-03-27
+cat82,Hat,Hat products category,2026-03-27
+cat83,Bag,Bag products category,2026-03-27
+cat84,Backpack,Backpack products category,2026-03-27
+cat85,Suitcase,Suitcase products category,2026-03-27
+cat86,Wallet,Wallet products category,2026-03-27
+cat87,Belt,Belt products category,2026-03-27
+cat88,Sunglasses,Sunglasses products category,2026-03-27
+cat89,Perfume,Perfume products category,2026-03-27
+cat90,Deodorant,Deodorant products category,2026-03-27
+cat91,Shampoo,Shampoo products category,2026-03-27
+cat92,Conditioner,Conditioner products category,2026-03-27
+cat93,Soap,Soap products category,2026-03-27
+cat94,Face Wash,Face Wash products category,2026-03-27
+cat95,Cream,Cream products category,2026-03-27
+cat96,Lotion,Lotion products category,2026-03-27
+cat97,Toothpaste,Toothpaste products category,2026-03-27
+cat98,Toothbrush,Toothbrush products category,2026-03-27
+cat99,Razor,Razor products category,2026-03-27
+cat100,Trimmer,Trimmer products category,2026-03-27
+cat101,Hair Dryer,Hair Dryer products category,2026-03-27
+cat102,Hair Straightener,Hair Straightener products category,2026-03-27
+cat103,Makeup Kit,Makeup Kit products category,2026-03-27
+cat104,Lipstick,Lipstick products category,2026-03-27
+cat105,Nail Polish,Nail Polish products category,2026-03-27
+cat106,Foundation,Foundation products category,2026-03-27
+cat107,Eyeliner,Eyeliner products category,2026-03-27
+cat108,Blush,Blush products category,2026-03-27
+cat109,Comb,Comb products category,2026-03-27
+cat110,Towel,Towel products category,2026-03-27
+cat111,Notebook,Notebook products category,2026-03-27
+cat112,Pen,Pen products category,2026-03-27
+cat113,Pencil,Pencil products category,2026-03-27
+cat114,Eraser,Eraser products category,2026-03-27
+cat115,Sharpener,Sharpener products category,2026-03-27
+cat116,Marker,Marker products category,2026-03-27
+cat117,Highlighter,Highlighter products category,2026-03-27
+cat118,File Folder,File Folder products category,2026-03-27
+cat119,Stapler,Stapler products category,2026-03-27
+cat120,Glue,Glue products category,2026-03-27
+cat121,Calculator,Calculator products category,2026-03-27
+cat122,Whiteboard,Whiteboard products category,2026-03-27
+cat123,Blackboard,Blackboard products category,2026-03-27
+cat124,Chalk,Chalk products category,2026-03-27
+cat125,Duster,Duster products category,2026-03-27
+cat126,Printer Paper,Printer Paper products category,2026-03-27
+cat127,Envelope,Envelope products category,2026-03-27
+cat128,Diary,Diary products category,2026-03-27
+cat129,Planner,Planner products category,2026-03-27
+cat130,Calendar,Calendar products category,2026-03-27
+cat131,Bottle,Bottle products category,2026-03-27
+cat132,Lunch Box,Lunch Box products category,2026-03-27
+cat133,Thermos,Thermos products category,2026-03-27
+cat134,Plate,Plate products category,2026-03-27
+cat135,Bowl,Bowl products category,2026-03-27
+cat136,Spoon,Spoon products category,2026-03-27
+cat137,Fork,Fork products category,2026-03-27
+cat138,Knife,Knife products category,2026-03-27
+cat139,Pan,Pan products category,2026-03-27
+cat140,Kettle,Kettle products category,2026-03-27
+cat141,Cooker,Cooker products category,2026-03-27
+cat142,Gas Stove,Gas Stove products category,2026-03-27
+cat143,Induction Cooktop,Induction Cooktop products category,2026-03-27
+cat144,Chimney,Chimney products category,2026-03-27
+cat145,Water Bottle,Water Bottle products category,2026-03-27
+cat146,Juicer,Juicer products category,2026-03-27
+cat147,Coffee Maker,Coffee Maker products category,2026-03-27
+cat148,Tea Maker,Tea Maker products category,2026-03-27
+cat149,Ice Maker,Ice Maker products category,2026-03-27
+cat150,Grill,Grill products category,2026-03-27
+cat151,Bike,Bike products category,2026-03-27
+cat152,Scooter,Scooter products category,2026-03-27
+cat153,Car,Car products category,2026-03-27
+cat154,Helmet,Helmet products category,2026-03-27
+cat155,Tyre,Tyre products category,2026-03-27
+cat156,Car Battery,Car Battery products category,2026-03-27
+cat157,Car Charger,Car Charger products category,2026-03-27
+cat158,Car Cover,Car Cover products category,2026-03-27
+cat159,Seat Cover,Seat Cover products category,2026-03-27
+cat160,Wiper,Wiper products category,2026-03-27
+cat161,Engine Oil,Engine Oil products category,2026-03-27
+cat162,Brake Oil,Brake Oil products category,2026-03-27
+cat163,Coolant,Coolant products category,2026-03-27
+cat164,Toolkit,Toolkit products category,2026-03-27
+cat165,Jack,Jack products category,2026-03-27
+cat166,Pump,Pump products category,2026-03-27
+cat167,Torch,Torch products category,2026-03-27
+cat168,Rope,Rope products category,2026-03-27
+cat169,Bucket,Bucket products category,2026-03-27
+cat170,Mug,Mug products category,2026-03-27
+cat171,Dustbin,Dustbin products category,2026-03-27
+cat172,Cleaning Brush,Cleaning Brush products category,2026-03-27
+cat173,Mop,Mop products category,2026-03-27
+cat174,Detergent,Detergent products category,2026-03-27
+cat175,Floor Cleaner,Floor Cleaner products category,2026-03-27
+cat176,Glass Cleaner,Glass Cleaner products category,2026-03-27
+cat177,Room Freshener,Room Freshener products category,2026-03-27
+cat178,Insect Killer,Insect Killer products category,2026-03-27
+cat179,Pesticide,Pesticide products category,2026-03-27
+cat180,Garden Hose,Garden Hose products category,2026-03-27
+cat181,Plant Pot,Plant Pot products category,2026-03-27
+cat182,Seeds,Seeds products category,2026-03-27
+cat183,Fertilizer,Fertilizer products category,2026-03-27
+cat184,Shovel,Shovel products category,2026-03-27
+cat185,Rake,Rake products category,2026-03-27
+cat186,Sprayer,Sprayer products category,2026-03-27
+cat187,Ladder,Ladder products category,2026-03-27
+cat188,Tool Box,Tool Box products category,2026-03-27
+cat189,Hammer,Hammer products category,2026-03-27
+cat190,Screwdriver,Screwdriver products category,2026-03-27
+cat191,Drill Machine,Drill Machine products category,2026-03-27
+cat192,Saw,Saw products category,2026-03-27
+cat193,Wrench,Wrench products category,2026-03-27
+cat194,Pliers,Pliers products category,2026-03-27
+cat195,Tape,Tape products category,2026-03-27
+cat196,Measuring Tape,Measuring Tape products category,2026-03-27
+cat197,Level Tool,Level Tool products category,2026-03-27
+cat198,Safety Gloves,Safety Gloves products category,2026-03-27
+cat199,Helmet Gear,Helmet Gear products category,2026-03-27
+cat200,Mask,Mask products category,2026-03-27

@@ -1,0 +1,201 @@
+_id,name,contact,email,description,avg_lead_time,reliability_score,delay_days_avg,cost_rating,invoice_number,supplier_id
+S1,Ajay Kumar,9524253198,ajay@gmail.com,Electronics supplier,9,3,1,4,30000,S1
+S2,Sanjay Singh,9827314450,sanjay.s@outlook.com,Industrial Tools,12,4,2,3,30001,S2
+S3,Aman Kumar Tiwari,9123456780,aman.tiwari@yahoo.com,Textile Wholesaler,7,5,0,5,30002,S3
+S4,Sumit Bhagat,9765432109,sumit.bhagat@gmail.com,Chemical Manufacturer,15,2,4,2,30003,S4
+S5,Rahul Sharma,9812093487,rahul.sharma@biz.in,Office Supplies,5,5,0,3,30004,S5
+S6,Priya Gupta,9933445566,priya.g@techcorp.com,IT Hardware,10,4,1,4,30005,S6
+S7,Vikram Malhotra,9456712340,v.malhotra@logistics.com,Logistics Partner,3,5,0,5,30006,S7
+S8,Sneha Verma,9211002233,sneha.v@rawmat.in,Raw Materials,20,3,3,2,30007,S8
+S9,Amit Joshi,9344556677,amit.joshi@build.com,Construction Supplies,14,4,2,4,30008,S9
+S10,Anjali Reddy,9500112233,anjali.reddy@food.in,Food & Beverage,6,4,1,3,30009,S10
+S11,Rohan Iyer,9666778899,rohan.iyer@autotech.com,Automotive Parts,11,3,2,4,30010,S11
+S12,Kavita Nair,9777889900,k.nair@furnish.com,Furniture Supplier,18,5,0,3,30011,S12
+S13,Rajesh Patil,9888990011,rajesh.p@medequip.in,Medical Equipment,8,4,1,5,30012,S13
+S14,Suresh Deshmukh,9999001122,suresh.d@safety.com,Safety Gear,9,3,2,2,30013,S14
+S15,Manish Chatterjee,9111223344,manish.c@print.in,Printing Services,4,5,0,4,30014,S15
+S16,Alok Mukherjee,9222334455,alok.m@clean.com,Cleaning Supplies,7,4,1,3,30015,S16
+S17,Pooja Das,9333445566,pooja.das@elec.com,Electrical Components,13,2,5,3,30016,S17
+S18,Swati Bose,9444556677,swati.bose@hvac.in,HVAC Systems,16,4,1,4,30017,S18
+S19,Vikram Yadav,9555667788,v.yadav@metal.com,Metal Fabrication,25,3,4,2,30018,S19
+S20,Neha Maurya,9666778899,neha.m@pack.in,Packaging Solutions,5,5,0,5,30019,S20
+S21,Deepak Pandey,9777889901,deepak.p@glass.com,Glass Products,12,3,2,3,30020,S21
+S22,Sunita Rao,9888990012,sunita.rao@plastic.in,Plastic Moldings,10,4,1,4,30021,S22
+S23,Arjun Mehra,9999001123,arjun.m@steel.com,Steel Strips,14,5,0,3,30022,S23
+S24,Ritu Saxena,9111223345,ritu.s@paper.com,Paper & Pulp,6,4,1,2,30023,S24
+S25,Abhishek Mishra,9222334456,abhishek.m@paint.in,Paints & Coatings,9,3,2,4,30024,S25
+S26,Megha Kulkarni,9333445567,megha.k@rubber.com,Rubber Components,11,4,1,5,30025,S26
+S27,Varun Pillai,9444556678,varun.p@energy.in,Solar Panels,20,5,0,4,30026,S27
+S28,Tanvi Hegde,9555667789,tanvi.h@lighting.com,LED Lighting,7,4,1,3,30027,S28
+S29,Karan Grover,9666778890,karan.g@cement.in,Cement Supplier,15,3,3,2,30028,S29
+S30,Ishani Choudhury,9777889902,ishani.c@wires.com,Cables & Wires,8,5,0,5,30029,S30
+S31,Gaurav Khatri,9888990013,gaurav.k@fasteners.in,Fasteners & Bolts,4,4,1,4,30030,S31
+S32,Shweta Chauhan,9999001124,shweta.c@valves.com,Industrial Valves,13,3,2,3,30031,S32
+S33,Manoj Tiwari,9111223346,manoj.t@pumps.in,Water Pumps,10,5,0,4,30032,S33
+S34,Rachna Jain,9222334457,rachna.j@bearing.com,Ball Bearings,6,4,1,5,30033,S34
+S35,Sameer Shah,9333445568,sameer.s@lubes.in,Lubricants,5,5,0,3,30034,S35
+S36,Divya Agarwal,9444556679,divya.a@filters.com,Air Filters,9,4,1,2,30035,S36
+S37,Prateek Bansal,9555667790,prateek.b@tools.in,Hand Tools,7,3,2,4,30036,S37
+S38,Aditi Singhal,9666778891,aditi.s@gears.com,Transmission Gears,18,4,2,5,30037,S38
+S39,Nitin Mittal,9777889903,nitin.m@pipes.in,PVC Pipes,12,5,0,3,30038,S39
+S40,Bhavna Kapoor,9888990014,bhavna.k@safety.com,Fire Extinguishers,8,4,1,4,30039,S40
+S41,Sandeep Rawat,9111002233,sandeep.r@logi.in,Freight Forwarder,4,5,0,5,30040,S41
+S42,Kiran Bedi,9222113344,kiran.b@security.com,CCTV Systems,11,4,1,4,30041,S42
+S43,Harish Chandra,9333224455,harish.c@agri.in,Agricultural Seeds,22,3,4,2,30042,S43
+S44,Pallavi Roy,9444335566,pallavi.r@chem.in,Laboratory Chemicals,9,5,0,5,30043,S44
+S45,Vineet Saran,9555446677,vineet.s@engines.com,Diesel Engines,30,4,2,3,30044,S45
+S46,Jyoti Kumari,9666557788,jyoti.k@apparel.in,Garment Trimmings,6,4,1,4,30045,S46
+S47,Akash Deep,9777668899,akash.d@ceramics.com,Tile Manufacturer,14,3,3,3,30046,S47
+S48,Shikha Pandey,9888779900,shikha.p@leather.in,Leather Goods,12,5,0,5,30047,S48
+S49,Mohit Suri,9999880011,mohit.s@batteries.com,UPS Batteries,7,4,1,4,30048,S49
+S50,Anupama Sen,9111991122,anupama.s@telecom.in,Network Cables,5,5,0,3,30049,S50
+S51,Tushar Goel,9222002233,tushar.g@heavy.in,Heavy Machinery,45,3,10,2,30050,S51
+S52,Rakhi Sawant,9333113344,rakhi.s@events.in,Event Decor,3,5,0,5,30051,S52
+S53,Pankaj Tripathi,9444224455,pankaj.t@casting.in,Iron Castings,19,4,2,4,30052,S53
+S54,Komal Jha,9555335566,komal.j@silk.in,Silk Fabric,10,4,1,5,30053,S54
+S55,Umesh Yadav,9666446677,umesh.y@mining.in,Mining Equipment,28,2,7,3,30054,S55
+S56,Sarita Devi,9777557788,sarita.d@dairy.in,Dairy Products,2,5,0,4,30055,S56
+S57,Rajiv Gandhi,9888668899,rajiv.g@tele.com,Mobile Handsets,8,4,1,3,30056,S57
+S58,Anshul Gupta,9999779900,anshul.g@hard.in,Hardware Store,5,5,0,4,30057,S58
+S59,Meera Bai,9111880011,meera.b@handicraft.in,Handicraft Items,15,4,2,5,30058,S59
+S60,Gopal Krishna,9222991122,gopal.k@spices.in,Indian Spices,7,5,0,4,30059,S60
+S61,Narendra Modi,9333002233,narendra.m@infra.in,Infrastructure,60,5,5,5,30060,S61
+S62,Rahul Dravid,9444113344,rahul.d@sports.in,Sports Gear,10,5,0,4,30061,S62
+S63,Mithali Raj,9555224455,mithali.r@cricket.in,Cricket Bats,12,4,1,5,30062,S63
+S64,Virat Kohli,9666335566,virat.k@fitness.in,Gym Equipment,14,5,0,3,30063,S64
+S65,Saina Nehwal,9777446677,saina.n@badminton.in,Shuttlecocks,6,5,0,4,30064,S65
+S66,Abhinav Bindra,9888557788,abhinav.b@optics.in,Precision Optics,20,5,0,5,30065,S66
+S67,Mary Kom,9999668899,mary.kom@boxing.in,Boxing Gloves,9,4,1,4,30066,S67
+S68,Pankaj Advani,9111779900,pankaj.a@billiards.in,Cue Sticks,25,5,0,5,30067,S68
+S69,Viswanathan Anand,9222880011,v.anand@chess.in,Chess Boards,7,5,0,3,30068,S69
+S70,Sunil Chhetri,9333991122,sunil.c@football.in,Football Kits,8,4,1,4,30069,S70
+S71,Arvind Kejriwal,9444002233,arvind.k@power.in,Solar Inverters,12,3,2,3,30070,S71
+S72,Mamata Banerjee,9555113344,mamata.b@jute.in,Jute Bags,10,4,1,2,30071,S72
+S73,Nitish Kumar,9666224455,nitish.k@agripro.in,Fertilizers,15,4,2,4,30072,S73
+S74,Yogi Adityanath,9777335566,yogi.a@sugar.in,Sugar Mill,20,5,1,5,30073,S74
+S75,M.K. Stalin,9888446677,mk.stalin@auto.in,Chassis Parts,11,5,0,4,30074,S75
+S76,Eknath Shinde,9999557788,eknath.s@port.in,Marine Services,30,4,3,4,30075,S76
+S77,Hemant Soren,9111668899,hemant.s@minerals.in,Iron Ore,40,3,5,3,30076,S77
+S78,Bhagwant Mann,9222779900,bhagwant.m@wheat.in,Wheat Flour,5,5,0,4,30077,S78
+S79,Pema Khandu,9333880011,pema.k@timber.in,Timber Logs,25,4,2,3,30078,S79
+S80,Pushkar Dhami,9444991122,pushkar.d@herbal.in,Ayurvedic Herbs,10,5,0,5,30079,S80
+S81,Siddaramaiah,9555002233,siddha.k@coffee.in,Coffee Beans,14,4,1,4,30080,S81
+S82,Revanth Reddy,9666113344,revanth.r@pharma.in,Bulk Drugs,12,5,0,5,30081,S82
+S83,N. Chandrababu Naidu,9777224455,ncb.naidu@itpark.in,Server Racks,9,5,0,5,30082,S83
+S84,Pinarayi Vijayan,9888335566,pinarayi.v@spices.com,Cardamom,11,4,1,4,30083,S84
+S85,Sukhhu Singh,9999446677,sukhu.s@apple.in,Apple Boxes,7,4,2,3,30084,S85
+S86,Manik Saha,9111557788,manik.s@rubber.in,Rubber Sheets,18,3,3,4,30085,S86
+S87,N. Biren Singh,9222668899,nbiren.s@crafts.in,Bamboo Crafts,22,4,2,3,30086,S87
+S88,Neiphiu Rio,9333779900,neiphiu.r@organic.in,Organic Honey,13,5,0,5,30087,S88
+S89,Lalduhoma,9444880011,lalduhoma.m@ginger.in,Fresh Ginger,8,4,1,2,30088,S89
+S90,Conrad Sangma,9555991122,conrad.s@coal.in,Coal Supplier,35,2,8,4,30089,S90
+S91,Mohan Yadav,9666002233,mohan.y@soyabean.in,Soya Lecithin,10,4,1,4,30090,S91
+S92,Vishnu Deo Sai,9777113344,vishnu.d@steel.in,Steel Billets,20,5,1,5,30091,S92
+S93,Bhajan Lal Sharma,9888224455,bhajan.s@marble.in,Makrana Marble,15,4,2,4,30092,S93
+S94,Atishi Marlena,9999335566,atishi.m@edu.in,School Stationery,5,5,0,3,30093,S94
+S95,J.P. Nadda,9111446677,jp.nadda@meds.in,Generic Medicines,9,5,0,5,30094,S95
+S96,Mallikarjun Kharge,9222557788,m.kharge@rail.in,Railway Sleepers,45,4,5,4,30095,S96
+S97,Shashi Tharoor,9333668899,shashi.t@lexicon.in,Dictionary Printing,12,5,0,5,30096,S97
+S98,Mahua Moitra,9444779900,mahua.m@luxury.in,Tea Estates,14,4,1,5,30097,S98
+S99,Asaduddin Owaisi,9555880011,asad.o@leather.com,Leather Jackets,18,3,2,4,30098,S99
+S100,K. Annamalai,9666991122,annamalai.k@police.in,Tactical Gear,10,5,0,5,30099,S100
+S101,Mukesh Ambani,9777002234,m.ambani@reliance.in,Petrochemicals,20,5,0,5,30100,S101
+S102,Gautam Adani,9888113345,g.adani@adani.in,Coal & Power,25,5,1,5,30101,S102
+S103,Ratan Tata,9999224456,r.tata@tata.com,Steel & Auto,15,5,0,5,30102,S103
+S104,Anand Mahindra,9111335567,a.mahindra@mahindra.in,Utility Vehicles,18,5,0,4,30103,S104
+S105,Shiv Nadar,9222446678,s.nadar@hcl.in,IT Solutions,10,5,0,5,30104,S105
+S106,Azim Premji,9333557789,a.premji@wipro.com,Software Services,7,5,0,4,30105,S106
+S107,Lakshmi Mittal,9444668890,l.mittal@arcelor.com,Global Steel,30,4,2,5,30106,S107
+S108,Kumar Mangalam Birla,9555779901,km.birla@aditya.com,Aluminium,22,5,0,4,30107,S108
+S109,Uday Kotak,9666880012,u.kotak@kotak.com,Financial Services,2,5,0,5,30108,S109
+S110,Dilip Shanghvi,9777991123,d.shanghvi@sun.in,Pharmaceuticals,14,5,0,5,30109,S110
+S111,Radhakishan Damani,9888002234,rk.damani@dmart.in,FMCG Retail,5,5,0,5,30110,S111
+S112,Cyrus Poonawalla,9999113345,c.poonawalla@serum.in,Vaccines,20,5,0,5,30111,S112
+S113,Savitri Jindal,9111224456,s.jindal@jsw.in,Steel Pipes,16,4,1,4,30112,S113
+S114,Sunil Mittal,9222335567,s.mittal@airtel.in,Telecom Gear,11,5,0,4,30113,S114
+S115,Nikhil Kamath,9333446678,n.kamath@zerodha.in,Fintech API,1,5,0,5,30114,S115
+S116,Vijay Shekhar Sharma,9444557789,vss@paytm.in,Digital Payments,1,4,0,3,30115,S116
+S117,Bhavish Aggarwal,9555668890,b.aggarwal@ola.in,Electric Scooters,25,3,5,4,30116,S117
+S118,Deepinder Goyal,9666779901,d.goyal@zomato.in,Cloud Kitchen,2,4,1,3,30117,S118
+S119,Ritesh Agarwal,9777880012,r.agarwal@oyo.in,Hospitality,5,3,2,2,30118,S119
+S120,Byju Raveendran,9888991123,byju.r@byjus.in,EdTech Content,10,2,4,5,30119,S120
+S121,Sachin Bansal,9999002234,s.bansal@navi.in,Insurance API,3,5,0,4,30120,S121
+S122,Kunal Shah,9111113345,k.shah@cred.in,Rewards Partner,2,5,0,5,30121,S122
+S123,Falguni Nayar,9222224456,f.nayar@nykaa.in,Beauty Products,6,5,0,4,30122,S123
+S124,Ghazal Alagh,9333335567,g.alagh@mama.in,Natural Toxins,8,4,1,5,30123,S124
+S125,Aman Gupta,9444446678,a.gupta@boat.in,Audio Devices,12,4,2,3,30124,S125
+S126,Ashneer Grover,9555557789,ashneer.g@bharat.in,POS Terminals,5,3,1,4,30125,S126
+S127,Namita Thapar,9666668890,n.thapar@emcure.in,HIV Drugs,15,5,0,5,30126,S127
+S128,Peyush Bansal,9777779901,p.bansal@lens.in,Eyewear,9,5,0,4,30127,S128
+S129,Anupam Mittal,9888880012,a.mittal@shaadi.in,Matchmaking,1,5,0,5,30128,S129
+S130,Vineeta Singh,9999991123,v.singh@sugar.in,Cosmetics,7,4,1,4,30129,S130
+S131,Ritesh Deshmukh,9111223300,ritesh.d@plant.in,Plant Based Meat,10,4,1,5,30130,S131
+S132,Genelia Dsouza,9222334411,genelia.d@organic.in,Organic Pulses,5,5,0,4,30131,S132
+S133,Ayushmann Khurrana,9333445522,ayush.k@groom.in,Men Grooming,8,4,1,3,30132,S133
+S134,Ranveer Singh,9444556633,ranveer.s@fashion.in,Bold Apparel,14,3,3,5,30133,S134
+S135,Deepika Padukone,9555667744,deepika.p@self.in,Skincare,9,5,0,5,30134,S135
+S136,Alia Bhatt,9666778855,alia.b@mama.in,Baby Wear,6,5,0,4,30135,S136
+S137,Ranbir Kapoor,9777889966,ranbir.k@luxury.in,Watches,20,4,1,5,30136,S137
+S138,Shah Rukh Khan,9888990077,srk.k@vfx.in,Visual Effects,15,5,0,5,30137,S138
+S139,Salman Khan,9999001188,salman.k@being.in,Apparel Charity,10,4,2,3,30138,S139
+S140,Aamir Khan,9111112299,aamir.k@film.in,Production Gear,30,5,0,5,30139,S140
+S141,Akshay Kumar,9222223301,akshay.k@fitness.in,Health Drinks,5,5,0,4,30140,S141
+S142,Hrithik Roshan,9333334412,hrithik.r@hrx.in,Activewear,7,5,0,4,30141,S142
+S143,Katrina Kaif,9444445523,katrina.k@kay.in,Makeup Kits,8,4,1,5,30142,S143
+S144,Vicky Kaushal,9555556634,vicky.k@suit.in,Men Suits,12,4,1,4,30143,S144
+S145,Kiara Advani,9666667745,kiara.a@jewelry.in,Fine Jewelry,18,5,0,5,30144,S145
+S146,Sidharth Malhotra,9777778856,sid.m@fragrance.in,Perfumes,11,4,1,4,30145,S146
+S147,Varun Dhawan,9888889967,varun.d@sneakers.in,Sneakers,10,3,2,3,30146,S147
+S148,Janhavi Kapoor,9999990078,janhvi.k@ethnic.in,Lehengas,25,4,2,5,30147,S148
+S149,Sara Ali Khan,9111001189,sara.k@cotton.in,Cotton Kurtas,6,5,0,4,30148,S149
+S150,Karthik Aryan,9222112200,karthik.a@hair.in,Hair Styling,5,4,1,3,30149,S150
+S151,Sunil Gavaskar,9333223311,sunil.g@pads.in,Batting Pads,12,5,0,4,30150,S151
+S152,Kapil Dev,9444334422,kapil.d@energy.in,Solar Pumps,15,5,0,4,30151,S152
+S153,Ravi Shastri,9555445533,ravi.s@comment.in,Audio Mics,5,4,0,5,30152,S153
+S154,Sachin Tendulkar,9666556644,sachin.t@srt.in,Safety Helmets,10,5,0,5,30153,S154
+S155,Sourav Ganguly,9777667755,sourav.g@steel.in,TMT Bars,18,4,1,4,30154,S155
+S156,MS Dhoni,9888778866,msd.d@farm.in,Organic Milk,3,5,0,4,30155,S156
+S157,Hardik Pandya,9999889977,hardik.p@style.in,Sunglasses,9,3,2,5,30156,S157
+S158,Jasprit Bumrah,9111990088,jasprit.b@shoes.in,Bowling Shoes,12,5,0,5,30157,S158
+S159,KL Rahul,9222001199,kl.rahul@inner.in,Innerwear,6,4,1,3,30158,S159
+S160,Rishabh Pant,9333112200,rishabh.p@gloves.in,Wicketkeeping Gloves,8,4,1,4,30159,S160
+S161,Mary Kom,9444223311,mary.k@punch.in,Heavy Bags,20,5,0,4,30160,S161
+S162,P.V. Sindhu,9555334422,pv.sindhu@racket.in,Badminton Rackets,7,5,0,5,30161,S162
+S163,Neeraj Chopra,9666445533,neeraj.c@javelin.in,Athletic Javelins,25,5,0,5,30162,S163
+S164,Hima Das,9777556644,hima.d@track.in,Running Spikes,11,4,1,4,30163,S164
+S165,Bajrang Punia,9888667755,bajrang.p@mats.in,Wrestling Mats,15,4,2,3,30164,S165
+S166,Vinesh Phogat,9999778866,vinesh.p@diet.in,Protein Powders,5,5,0,5,30165,S166
+S167,Sakshi Malik,9111889977,sakshi.m@gear.in,Knee Guards,8,4,1,4,30166,S167
+S168,Manika Batra,9222990088,manika.b@tt.in,TT Tables,14,4,1,5,30167,S168
+S169,Praggnanandhaa,9333001199,pragg.c@clock.in,Chess Clocks,9,5,0,5,30168,S169
+S170,Gukesh D,9444112200,gukesh.d@books.in,Chess Theory,5,5,0,3,30169,S170
+S171,Anoop Singh,9555223311,anoop.s@weights.in,Dumbbells,12,4,2,3,30170,S171
+S172,Babita Kumari,9666334422,babita.k@singlet.in,Wrestling Suits,10,4,1,4,30171,S172
+S173,Chitra Magimairaj,9777445533,chitra.m@snooker.in,Snooker Balls,15,5,0,5,30172,S173
+S174,Dipa Karmakar,9888556644,dipa.k@gym.in,Vaulting Table,30,4,3,4,30173,S174
+S175,Esha Singh,9999667755,esha.s@pistol.in,Air Pistols,20,5,0,5,30174,S175
+S176,Farman Basha,9111778866,farman.b@bench.in,Powerlifting Benches,25,5,0,4,30175,S176
+S177,Gagan Narang,9222889977,gagan.n@rifles.in,Target Rifles,22,5,0,5,30176,S177
+S178,Heena Sidhu,9333990088,heena.s@sight.in,Gun Sights,14,4,1,4,30177,S178
+S179,Irfan Pathan,9444001199,irfan.p@turf.in,Artificial Turf,18,4,2,4,30178,S179
+S180,Jwala Gutta,9555112200,jwala.g@academy.in,Shuttle Nets,6,4,1,3,30179,S180
+S181,Karnam Malleswari,9666223311,karnam.m@iron.in,Weight Plates,12,5,0,5,30180,S181
+S182,Leander Paes,9777334422,leander.p@tennis.in,Tennis Balls,5,5,0,4,30181,S182
+S183,Mahesh Bhupathi,9888445533,mahesh.b@court.in,Clay Surfaces,40,4,5,5,30182,S183
+S184,Narain Karthikeyan,9999556644,narain.k@racing.in,Racing Tyres,10,5,0,5,30183,S184
+S185,Om Prakash,9111667755,om.p@shotput.in,Shotputs,15,4,1,3,30184,S185
+S186,Pankaj Advani,9222778866,pankaj.adv@felt.in,Billiard Felt,12,5,0,5,30185,S186
+S187,Quinton Dsouza,9333889977,quinton.d@marine.in,Boat Engines,30,3,4,4,30186,S187
+S188,Rajyavardhan Rathore,9444990088,raj.r@trap.in,Clay Pigeons,9,5,0,4,30187,S188
+S189,Sania Mirza,9555001199,sania.m@apparel.in,Tennis Skirts,7,5,0,5,30188,S189
+S190,Tejaswin Shankar,9666112200,tejas.s@jump.in,High Jump Mats,20,4,2,4,30189,S190
+S191,Upen Patel,9777223311,upen.p@model.in,Portfolio Print,5,4,1,3,30190,S191
+S192,Vikas Krishan,9888334422,vikas.k@boxing.in,Mouth Guards,4,5,0,2,30191,S192
+S193,Waseem Jaffer,9999445533,waseem.j@memes.in,Social Content,1,5,0,4,30192,S193
+S194,Xavier Fernandes,9111556644,xavier.f@goa.in,Feni Barrels,60,3,10,5,30193,S194
+S195,Yuvraj Singh,9222667755,uv.s@cancer.in,Diagnostic Kits,10,5,0,5,30194,S195
+S196,Zakir Hussain,9333778866,zakir.h@tabla.in,Musical Percussion,25,5,0,5,30195,S196
+S197,Amjad Ali Khan,9444889977,amjad.a@sarod.in,Stringed Inst,28,5,0,5,30196,S197
+S198,Bismillah Khan,9555990088,bismillah.k@wind.in,Woodwind Inst,30,5,0,5,30197,S198
+S199,Lata Mangeshkar,9666001199,lata.m@records.in,Studio Mics,5,5,0,5,30198,S199
+S200,Kishore Kumar,9777112200,kishore.k@karaoke.in,Karaoke Systems,8,4,1,4,30199,S200

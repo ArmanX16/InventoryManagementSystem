@@ -1,166 +1,147 @@
 import flet as ft
-from ui.theme import (
-    ACCENT_PRIMARY,
-    ACCENT_SECONDARY,
-    COLOR_DANGER,
-    TEXT_PRIMARY,
-    TEXT_SECONDARY,
-)
-from ui.components import (
-    build_card,
-    build_status_badge,
-    build_page_header,
-    build_data_table,
-    build_action_button,
-    build_mini_bar_chart,
-)
-from data.constants import ALL_CATEGORIES
+from pymongo import MongoClient
+from datetime import datetime
+client = MongoClient("mongodb://localhost:27017/")
+db = client["inventory"]
+
+
+col = db["categories"]
 
 
 def build_categories_page(flet_page: ft.Page):
-    category_table_rows = [
-        ft.DataRow(
-            cells=[
-                ft.DataCell(
-                    ft.Text(category_entry["id"], color=TEXT_SECONDARY, size=12)
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        category_entry["name"],
-                        color=TEXT_PRIMARY,
-                        size=13,
-                        weight=ft.FontWeight.W_500,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        str(category_entry["products"]),
-                        color=ACCENT_PRIMARY,
-                        size=13,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        f'₹{category_entry["value"]:,}',
-                        color=TEXT_PRIMARY,
-                        size=13,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Row(
-                        [
-                            ft.IconButton(
-                                ft.Icons.EDIT,
-                                icon_color=ACCENT_PRIMARY,
-                                icon_size=16,
-                            ),
-                            ft.IconButton(
-                                ft.Icons.DELETE,
-                                icon_color=COLOR_DANGER,
-                                icon_size=16,
-                            ),
-                        ],
-                        spacing=0,
-                    )
-                ),
-            ]
-        )
-        for category_entry in ALL_CATEGORIES
-    ]
 
-    distribution_chart = build_mini_bar_chart(
-        bar_values=[category_entry["products"] for category_entry in ALL_CATEGORIES],
-        bar_labels=[category_entry["name"] for category_entry in ALL_CATEGORIES],
-        bar_color=ACCENT_SECONDARY,
+    sel = {"id": None}
+
+    id_f = ft.TextField(label="Category ID", width=250)
+    name_f = ft.TextField(label="Category Name", width=350)
+    desc_f = ft.TextField(label="Description", width=500, multiline=True)
+    time_f = ft.TextField(label="Created At", width=250, disabled=True)
+
+    table = ft.DataTable(
+        columns=[
+            ft.DataColumn(ft.Text("ID")),
+            ft.DataColumn(ft.Text("Name")),
+            ft.DataColumn(ft.Text("Description")),
+            ft.DataColumn(ft.Text("Created At")),
+        ],
+        rows=[],
+        border=ft.border.all(1, "#cbd5e1"),
+        border_radius=10,
     )
 
-    distribution_chart_card = build_card(
-        ft.Column(
-            [
-                ft.Text(
-                    "Category Distribution",
-                    size=15,
-                    weight=ft.FontWeight.W_600,
-                    color=TEXT_PRIMARY,
-                ),
-                ft.Container(height=12),
-                distribution_chart,
-            ]
-        ),
-        should_expand=True,
-    )
+    def reset(e=None):
+        sel["id"] = None
+        id_f.value = ""
+        name_f.value = ""
+        desc_f.value = ""
+        time_f.value = ""
+        flet_page.update()
 
-    quick_stats_rows = [
-        ft.Row(
-            [
-                ft.Text(
-                    category_entry["name"],
-                    color=TEXT_PRIMARY,
-                    size=13,
-                    expand=True,
-                ),
-                build_status_badge(
-                    f'{category_entry["products"]} products',
-                    ACCENT_PRIMARY,
-                ),
-            ]
+    def fill(d):
+        sel["id"] = d["_id"]
+        id_f.value = d["_id"]
+        name_f.value = d.get("name", "")
+        desc_f.value = d.get("description", "")
+        time_f.value = str(d.get("created_at", ""))
+        flet_page.update()
+
+    def load(data=None):
+        table.rows.clear()
+        data = data if data else col.find()
+
+        for d in data:
+            def click(e, x=d):
+                fill(x)
+
+            table.rows.append(
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(ft.Text(str(d.get("_id", ""))), on_tap=click),
+                        ft.DataCell(ft.Text(d.get("name", ""))),
+                        ft.DataCell(ft.Text(d.get("description", ""))),
+                        ft.DataCell(ft.Text(str(d.get("created_at", "")))),
+                    ]
+                )
+            )
+        flet_page.update()
+
+    def add(e):
+        if not id_f.value:
+            return
+        if col.find_one({"_id": id_f.value}):
+            return
+        d = {
+            "_id": id_f.value,
+            "name": name_f.value,
+            "description": desc_f.value,
+            "created_at": datetime.now().strftime("%Y-%m-%d"),
+        }
+        col.insert_one(d)
+        reset()
+        load()
+
+    def update(e):
+        if not sel["id"]:
+            return
+        col.update_one(
+            {"_id": sel["id"]},
+            {"$set": {"name": name_f.value, "description": desc_f.value}},
         )
-        for category_entry in ALL_CATEGORIES
-    ]
+        reset()
+        load()
 
-    quick_stats_card = build_card(
-        ft.Column(
+    def delete(e):
+        if not sel["id"]:
+            return
+        col.delete_one({"_id": sel["id"]})
+        reset()
+        load()
+
+    btn_add = ft.ElevatedButton("Add", bgcolor="#22c55e", color="white", on_click=add)
+    btn_upd = ft.ElevatedButton("Update", bgcolor="#3b82f6", color="white", on_click=update)
+    btn_del = ft.ElevatedButton("Delete", bgcolor="#ef4444", color="white", on_click=delete)
+    btn_clr = ft.ElevatedButton("Clear", bgcolor="#64748b", color="white", on_click=reset)
+
+    form = ft.Container(
+        content=ft.Column(
             [
-                ft.Text(
-                    "Quick Stats",
-                    size=15,
-                    weight=ft.FontWeight.W_600,
-                    color=TEXT_PRIMARY,
-                ),
-                ft.Container(height=12),
-                *quick_stats_rows,
+                ft.Text("Category Form", size=26, weight="bold"),
+                id_f,
+                name_f,
+                desc_f,
+                time_f,
+                ft.Row([btn_add, btn_upd, btn_del, btn_clr], spacing=20),
             ],
-            spacing=10,
+            spacing=15,
         ),
-        should_expand=True,
+        padding=25,
+        bgcolor="white",
+        border_radius=15,
+        shadow=ft.BoxShadow(blur_radius=15, color="#cbd5f5"),
     )
+
+    grid = ft.Container(
+        content=ft.Column(
+            [
+                ft.Text("All Categories", size=24, weight="bold"),
+                table,
+            ]
+        ),
+        padding=25,
+        bgcolor="white",
+        border_radius=15,
+        shadow=ft.BoxShadow(blur_radius=15, color="#cbd5f5"),
+    )
+
+    load()
 
     return ft.Column(
         [
-            build_page_header(
-                header_title="Categories Management",
-                header_subtitle="Organize your product categories",
-                header_icon=ft.Icons.CATEGORY,
-                action_buttons=[build_action_button("Add Category", ft.Icons.ADD)],
-            ),
-            ft.Container(height=20),
-            ft.ResponsiveRow(
-                [
-                    ft.Column([distribution_chart_card], col={"xs": 12, "md": 7}),
-                    ft.Column([quick_stats_card], col={"xs": 12, "md": 5}),
-                ],
-                spacing=16,
-            ),
-            ft.Container(height=20),
-            build_card(
-                ft.Column(
-                    [
-                        build_data_table(
-                            column_labels=[
-                                "ID",
-                                "Name",
-                                "Products",
-                                "Total Value",
-                                "Actions",
-                            ],
-                            table_rows=category_table_rows,
-                        )
-                    ],
-                    scroll=ft.ScrollMode.AUTO,
-                )
-            ),
+            ft.Text("Category Management", size=34, weight="bold", color="#1e293b"),
+            form,
+            grid,
         ],
-        spacing=0,
+        spacing=30,
         scroll=ft.ScrollMode.AUTO,
         expand=True,
     )
