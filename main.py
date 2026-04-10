@@ -46,7 +46,7 @@ ROLE_ACCESS = {
         "dashboard",
         "products",
         "categories",
-        "sales",
+        "Billing",
         "suppliers",
         "forecast",
         "analytics",
