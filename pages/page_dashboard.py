@@ -26,74 +26,71 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["inventoryai"]
 collection = db["cleaned_inventory"]
 
+# 🔥 CACHE (IMPORTANT)
+_cached_df = None
 
-# ----------------load data ----------------
+
+# ---------------- FAST LOAD ----------------
 def load_data():
-    data = list(collection.find({}, {"_id": 0}))
+    global _cached_df
+
+    if _cached_df is not None:
+        return _cached_df
+
+    # 🔥 LIMIT DATA (MOST IMPORTANT FIX)
+    data = list(collection.find({}, {"_id": 0}).limit(3000))
+
     if not data:
         return pd.DataFrame()
 
     df = pd.DataFrame(data)
 
-
-    date_cols = ["date", "created_at", "updated_at", "inv_created_at"]
-
-    for col in date_cols:
-        if col in df.columns:
-            df[col] = pd.to_datetime(df[col], errors="coerce")
-
-
+    # 🔥 FAST DATE HANDLING
     if "date" in df.columns:
-        df["sale_date"] = df["date"]
+        df["sale_date"] = pd.to_datetime(df["date"], errors="coerce")
     elif "created_at" in df.columns:
-        df["sale_date"] = df["created_at"]
+        df["sale_date"] = pd.to_datetime(df["created_at"], errors="coerce")
     else:
         df["sale_date"] = pd.Timestamp("today")
 
-
-    for col in ["qty", "quantity", "total", "selling_price", "cost_price", "current_stock"]:
+    # 🔥 FAST NUMERIC CONVERSION
+    numeric_cols = ["qty", "quantity", "total", "selling_price", "cost_price", "current_stock"]
+    for col in numeric_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
 
-
     df["quantity"] = df["qty"] if "qty" in df.columns else df.get("quantity", 0)
+    df["stock_level"] = df.get("current_stock", 0)
 
-    df["stock_level"] = df["current_stock"] if "current_stock" in df.columns else 0
-
-    df["revenue"] = df["total"] if "total" in df.columns else (
-        df["selling_price"] * df["quantity"]
-    )
-
+    # 🔥 VECTOR CALCULATION (FASTER)
+    df["revenue"] = df.get("total", df["selling_price"] * df["quantity"])
     df["profit"] = (df.get("selling_price", 0) - df.get("cost_price", 0)) * df["quantity"]
 
+    _cached_df = df
     return df
 
 
-# ----------------main------------------------------
+# ---------------- MAIN ----------------
 def build_dashboard_page(flet_page: ft.Page):
     df = load_data()
 
     if df.empty:
         return ft.Text("No data available", color="white")
 
-    # latest product snapshot
-    latest = df.sort_values("sale_date").groupby("product_id").last().reset_index()
+    # 🔥 FAST GROUPING
+    latest = df.sort_values("sale_date").groupby("product_id", as_index=False).last()
 
-    # ---------------- STATS ----------------
     total_products = latest["product_id"].nunique()
 
-    low_stock = len(
-        latest[latest["stock_level"] <= latest.get("reorder_point", pd.Series([0]*len(latest)))]
-    )
+    reorder = latest.get("reorder_point", pd.Series([0]*len(latest)))
 
+    low_stock = len(latest[latest["stock_level"] <= reorder])
     out_stock = len(latest[latest["stock_level"] == 0])
-
     total_revenue = int(df["revenue"].sum())
 
     # ---------------- ALERTS ----------------
     alerts = []
-
-    for _, r in latest.iterrows():
+    for _, r in latest.head(200).iterrows():  # 🔥 LIMIT LOOP
         if r["stock_level"] == 0:
             alerts.append({
                 "type": "danger",
@@ -111,60 +108,48 @@ def build_dashboard_page(flet_page: ft.Page):
 
     alerts = alerts[:5]
 
-    alert_widgets = ft.Column(
-        [
-            ft.Row(
-                [
-                    ft.Container(
-                        width=8,
-                        height=8,
-                        border_radius=4,
-                        bgcolor=(COLOR_DANGER if a["type"] == "danger" else COLOR_WARNING),
-                    ),
-                    ft.Column(
-                        [
-                            ft.Text(a["title"], size=13, color=TEXT_PRIMARY),
-                            ft.Text(a["msg"], size=11, color=TEXT_SECONDARY),
-                        ],
-                        spacing=1,
-                        expand=True,
-                    ),
-                    ft.Text(a["time"], size=11, color=TEXT_SECONDARY),
-                ]
-            )
-            for a in alerts
-        ]
-    )
+    alert_widgets = ft.Column([
+        ft.Row([
+            ft.Container(
+                width=8,
+                height=8,
+                border_radius=4,
+                bgcolor=(COLOR_DANGER if a["type"] == "danger" else COLOR_WARNING),
+            ),
+            ft.Column([
+                ft.Text(a["title"], size=13, color=TEXT_PRIMARY),
+                ft.Text(a["msg"], size=11, color=TEXT_SECONDARY),
+            ], spacing=1, expand=True),
+            ft.Text(a["time"], size=11, color=TEXT_SECONDARY),
+        ])
+        for a in alerts
+    ])
 
-
-    top_df = df.groupby("product_id")["quantity"].sum().sort_values(ascending=False).head(5)
-
+    # 🔥 FAST TOP PRODUCTS
+    top_df = df.groupby("product_id")["quantity"].sum().nlargest(5)
     top_products = latest.set_index("product_id").loc[top_df.index].reset_index()
 
     rows = [
-        ft.DataRow(
-            cells=[
-                ft.DataCell(ft.Text(r.get("name", ""), color=TEXT_PRIMARY)),
-                ft.DataCell(ft.Text(str(r.get("category_id", "")), color=TEXT_SECONDARY)),
-                ft.DataCell(ft.Text(
-                    str(r["stock_level"]),
-                    color=COLOR_SUCCESS if r["stock_level"] > r.get("reorder_point", 0) else COLOR_DANGER
-                )),
-                ft.DataCell(ft.Text(f"₹{r.get('selling_price',0)}", color=TEXT_PRIMARY)),
-            ]
-        )
+        ft.DataRow(cells=[
+            ft.DataCell(ft.Text(r.get("name", ""), color=TEXT_PRIMARY)),
+            ft.DataCell(ft.Text(str(r.get("category_id", "")), color=TEXT_SECONDARY)),
+            ft.DataCell(ft.Text(
+                str(r["stock_level"]),
+                color=COLOR_SUCCESS if r["stock_level"] > r.get("reorder_point", 0) else COLOR_DANGER
+            )),
+            ft.DataCell(ft.Text(f"₹{r.get('selling_price',0)}", color=TEXT_PRIMARY)),
+        ])
         for _, r in top_products.iterrows()
     ]
 
-
-    cat_data = df.groupby("category_id")["revenue"].sum().sort_values(ascending=False).head(4)
+    # 🔥 FAST CHART
+    cat_data = df.groupby("category_id")["revenue"].sum().nlargest(4)
 
     chart = build_mini_bar_chart(
         bar_values=cat_data.values.tolist(),
         bar_labels=cat_data.index.tolist(),
         bar_color=ACCENT_PRIMARY,
     )
-
 
     inventory_chart_card = build_card(
         ft.Column([
@@ -213,7 +198,6 @@ def build_dashboard_page(flet_page: ft.Page):
             ft.Text(insight_text, color=TEXT_SECONDARY)
         ])
     )
-
 
     return ft.Column(
         [
