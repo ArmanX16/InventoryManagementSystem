@@ -1,216 +1,216 @@
 import flet as ft
-from ui.theme import (
-    ACCENT_PRIMARY,
-    ACCENT_SECONDARY,
-    COLOR_DANGER,
-    COLOR_SUCCESS,
-    COLOR_WARNING,
-    TEXT_PRIMARY,
-    TEXT_SECONDARY,
-)
-from ui.components import (
-    build_card,
-    build_status_badge,
-    build_page_header,
-    build_stat_card,
-    build_data_table,
-    build_action_button,
-)
-from data.constants import ALL_PRODUCTS
+from datetime import datetime, timedelta
+from data.database import db
+import threading
+import time
+
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+products_col = db["products"]
+purchase_col = db["purchase_orders"]
+suppliers_col = db["suppliers"]
+counters_col = db["counters"]
+auto_po_col = db["auto_purchase_history"]
+
+from ui.theme import *
+from ui.components import build_page_header, build_card
+
+
+def get_next_po():
+    counter = counters_col.find_one_and_update(
+        {"_id": "po_counter"},
+        {"$inc": {"seq": 1}},
+        upsert=True,
+        return_document=True
+    )
+    return f"PO{counter['seq']}"
+
+
+def train_ai_model():
+    data = list(products_col.find())
+
+    X, y = [], []
+    for d in data:
+        try:
+            stock = int(d.get("current_stock", 0))
+            reorder = int(d.get("reorder_point", 0))
+            lead = int(d.get("lead_time_days", 1))
+            turnover = int(d.get("turnover_ratio", 1))
+
+            X.append([stock, reorder, lead, turnover])
+            y.append(max(reorder * 2, 10))
+        except:
+            continue
+
+    if not X:
+        return None
+
+    model = LinearRegression()
+    model.fit(np.array(X), np.array(y))
+    return model
 
 
 def build_reorder_page(flet_page: ft.Page):
-    products_below_reorder_threshold = [
-        product for product in ALL_PRODUCTS if product["stock"] < product["reorder"]
-    ]
 
-    reorder_suggestion_rows = [
-        ft.DataRow(
-            cells=[
-                ft.DataCell(
-                    ft.Text(product_entry["name"], color=TEXT_PRIMARY, size=13)
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        str(product_entry["stock"]),
-                        color=(
-                            COLOR_DANGER
-                            if product_entry["stock"] == 0
-                            else COLOR_WARNING
-                        ),
-                        size=13,
-                        weight=ft.FontWeight.W_600,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        str(product_entry["reorder"]),
-                        color=TEXT_SECONDARY,
-                        size=12,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        str(product_entry["reorder"] * 3),
-                        color=ACCENT_SECONDARY,
-                        size=13,
-                    )
-                ),
-                ft.DataCell(
-                    ft.Text(product_entry["supplier"], color=TEXT_SECONDARY, size=12)
-                ),
-                ft.DataCell(
-                    ft.Text(
-                        f'₹{product_entry["reorder"] * 3 * product_entry["price"]:,.0f}',
-                        color=TEXT_PRIMARY,
-                        size=13,
-                    )
-                ),
-                ft.DataCell(
-                    ft.ElevatedButton(
-                        "Create Product Order",
-                        bgcolor=ACCENT_PRIMARY,
-                        color=TEXT_PRIMARY,
-                        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8)),
-                        height=32,
-                    )
-                ),
-            ]
-        )
-        for product_entry in products_below_reorder_threshold
-    ]
+    ai_mode = {"value": False}
+    ai_model = {"model": None}
 
-    ai_intelligence_banner = build_card(
-        ft.Column(
-            [
-                ft.Row(
-                    [
-                        ft.Icon(ft.Icons.LIGHTBULB, color=ACCENT_PRIMARY, size=20),
+    low_stock_column = ft.Column([])
+    auto_table_column = ft.Column([])
+    notification = ft.Text("", color=COLOR_WARNING)
+
+    def safe_update():
+        try:
+            flet_page.update()
+        except:
+            pass
+
+    # ─────────────────────────────
+    # LOW STOCK DISPLAY
+    # ─────────────────────────────
+    def refresh_low_stock():
+        low_stock_column.controls.clear()
+
+        for p in products_col.find():
+            try:
+                stock = int(p.get("current_stock", 0))
+                reorder = int(p.get("reorder_point", 0))
+
+                if stock < reorder:
+                    low_stock_column.controls.append(
                         ft.Text(
-                            "AI Reorder Intelligence Active",
-                            color=TEXT_PRIMARY,
-                            size=14,
-                            weight=ft.FontWeight.W_600,
-                        ),
-                        ft.Container(expand=True),
-                        build_status_badge("AUTO-MODE ON", COLOR_SUCCESS),
-                    ],
-                    spacing=10,
-                ),
-                ft.Container(height=8),
-                ft.Text(
-                    "The AI engine monitors stock levels 24/7 and auto-suggests reorder quantities based on lead times, demand forecasts, and cost optimization.",
-                    color=TEXT_SECONDARY,
-                    size=13,
-                ),
-            ],
-            spacing=0,
-        ),
-        card_background_color=ft.Colors.with_opacity(0.1, ACCENT_PRIMARY),
-    )
+                            f"{p['name']} → Stock: {stock}",
+                            color="red",
+                            weight=ft.FontWeight.BOLD
+                        )
+                    )
+            except:
+                continue
 
-    reorder_table_card = build_card(
-        ft.Column(
-            [
-                ft.Row(
-                    [
-                        ft.Text(
-                            "Reorder Recommendations",
-                            size=15,
-                            weight=ft.FontWeight.W_600,
-                            color=TEXT_PRIMARY,
-                        ),
-                        ft.Container(expand=True),
-                        build_action_button(
-                            "Approve All", ft.Icons.DONE_ALL, button_color=COLOR_SUCCESS
-                        ),
-                    ]
-                ),
-                ft.Container(height=12),
-                build_data_table(
-                    column_labels=[
-                        "Product",
-                        "Current Stock",
-                        "Min Threshold",
-                        "Suggested Qty",
-                        "Supplier",
-                        "Est. Cost",
-                        "Action",
-                    ],
-                    table_rows=reorder_suggestion_rows,
-                ),
+    # ─────────────────────────────
+    # AUTO TABLE
+    # ─────────────────────────────
+    def refresh_auto_table():
+        rows = []
+
+        for po in auto_po_col.find().sort("created_at", -1).limit(50):
+            rows.append(
+                ft.DataRow(cells=[
+                    ft.DataCell(ft.Text(po.get("po_id", ""))),
+                    ft.DataCell(ft.Text(po.get("product", ""))),
+                    ft.DataCell(ft.Text(str(po.get("predicted_qty", "")))),
+                    ft.DataCell(ft.Text(str(po.get("created_at", ""))[:19])),
+                ])
+            )
+
+        auto_table_column.controls.clear()
+        auto_table_column.controls.append(ft.DataTable(
+            columns=[
+                ft.DataColumn(ft.Text("PO ID")),
+                ft.DataColumn(ft.Text("Product")),
+                ft.DataColumn(ft.Text("Qty")),
+                ft.DataColumn(ft.Text("Time")),
             ],
-            scroll=ft.ScrollMode.AUTO,
-        )
-    )
+            rows=rows
+        ))
+
+    # ─────────────────────────────
+    # AI ENGINE
+    # ─────────────────────────────
+    def auto_engine():
+        while ai_mode["value"]:
+            model = ai_model["model"]
+
+            for p in products_col.find():
+                try:
+                    stock = int(p.get("current_stock", 0))
+                    reorder = int(p.get("reorder_point", 0))
+                    lead = int(p.get("lead_time_days", 1))
+                    turnover = max(int(p.get("turnover_ratio", 1)), 1)
+
+                    # SMART CONDITION
+                    if stock < reorder and (stock / turnover) < lead:
+
+                        # avoid duplicate PO
+                        exists = purchase_col.find_one({
+                            "product_id": p["product_id"],
+                            "status": "Auto"
+                        })
+
+                        if exists:
+                            continue
+
+                        pred_qty = int(model.predict([[stock, reorder, lead, turnover]])[0])
+
+                        po_id = get_next_po()
+
+                        purchase_col.insert_one({
+                            "_id": po_id,
+                            "product_id": p["product_id"],
+                            "supplier_id": p.get("supplier_id"),
+                            "quantity": pred_qty,
+                            "order_date": datetime.now(),
+                            "expected_delivery": datetime.now() + timedelta(days=lead),
+                            "status": "Auto"
+                        })
+
+                        auto_po_col.insert_one({
+                            "po_id": po_id,
+                            "product": p["name"],
+                            "predicted_qty": pred_qty,
+                            "created_at": datetime.now()
+                        })
+
+                        notification.value = f"⚠ Auto reordered: {p['name']}"
+
+                except:
+                    continue
+
+            refresh_low_stock()
+            refresh_auto_table()
+            safe_update()
+            time.sleep(8)
+
+    def start_ai():
+        threading.Thread(target=auto_engine, daemon=True).start()
+
+    def toggle_ai(e):
+        ai_mode["value"] = e.control.value
+        if ai_mode["value"]:
+            ai_model["model"] = train_ai_model()
+            notification.value = "🤖 AI ACTIVE"
+            start_ai()
+        else:
+            notification.value = "🛑 AI STOPPED"
+        safe_update()
+
+    ai_switch = ft.Switch(label="AI Auto Reorder", on_change=toggle_ai)
+
+    refresh_low_stock()
+    refresh_auto_table()
 
     return ft.Column(
         [
             build_page_header(
-                header_title="Smart Reorder",
-                header_subtitle="AI recommended reorder suggestions",
-                header_icon=ft.Icons.AUTORENEW,
+                header_title="Smart Reorder System",
+                header_subtitle="Fully Automated AI Inventory",
+                header_icon=ft.Icons.PSYCHOLOGY,
             ),
-            ft.Container(height=20),
-            ai_intelligence_banner,
-            ft.Container(height=20),
-            ft.ResponsiveRow(
-                [
-                    ft.Column(
-                        [
-                            build_stat_card(
-                                ft.Icons.WARNING,
-                                "Items to Reorder",
-                                len(products_below_reorder_threshold),
-                                None,
-                                COLOR_DANGER,
-                            )
-                        ],
-                        col={"xs": 6, "md": 3},
-                    ),
-                    ft.Column(
-                        [
-                            build_stat_card(
-                                ft.Icons.ATTACH_MONEY,
-                                "Est. PO Value",
-                                "₹12,450",
-                                None,
-                                ACCENT_PRIMARY,
-                            )
-                        ],
-                        col={"xs": 6, "md": 3},
-                    ),
-                    ft.Column(
-                        [
-                            build_stat_card(
-                                ft.Icons.LOCAL_SHIPPING,
-                                "Preferred Suppliers",
-                                "3",
-                                None,
-                                ACCENT_SECONDARY,
-                            )
-                        ],
-                        col={"xs": 6, "md": 3},
-                    ),
-                    ft.Column(
-                        [
-                            build_stat_card(
-                                ft.Icons.SCHEDULE,
-                                "Avg Lead Time",
-                                "5 days",
-                                None,
-                                COLOR_WARNING,
-                            )
-                        ],
-                        col={"xs": 6, "md": 3},
-                    ),
-                ],
-                spacing=16,
-            ),
-            ft.Container(height=20),
-            reorder_table_card,
+
+            ft.Row([ai_switch]),
+            notification,
+
+            build_card(ft.Column([
+                ft.Text("⚠ Low Stock Items", color="white"),
+                low_stock_column
+            ])),
+
+            build_card(ft.Column([
+                ft.Text("🤖 Auto Reorder History", color="white"),
+                auto_table_column
+            ])),
         ],
-        spacing=0,
         scroll=ft.ScrollMode.AUTO,
         expand=True,
     )

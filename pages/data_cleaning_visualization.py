@@ -15,22 +15,51 @@ import base64
 from io import BytesIO
 from datetime import datetime
 
+import os
+import uuid
 
 # ----------------database ----------------
 client = MongoClient("mongodb://localhost:27017/")
 raw_db = client["inventory"]
 clean_db = client["inventoryai"]
 
+# ---------------- ADD THIS NEW FUNCTION ----------------
+def save_chart_and_get_b64(fig, chart_name):
+    """
+    Save chart inside charts/ folder with unique filename
+    and also return base64 for Flet UI display
+    """
 
-# ---------------- UTIL ----------------
-def fig_to_b64(fig):
+    folder = "charts"
+    os.makedirs(folder, exist_ok=True)
+
+    unique_name = f"{chart_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}.png"
+    full_path = os.path.join(folder, unique_name)
+
+    fig.savefig(
+        full_path,
+        format="png",
+        bbox_inches="tight",
+        dpi=180
+    )
+
     buf = BytesIO()
-    fig.savefig(buf, format="png", bbox_inches="tight")
+    fig.savefig(
+        buf,
+        format="png",
+        bbox_inches="tight",
+        dpi=180
+    )
     buf.seek(0)
+
     img = base64.b64encode(buf.read()).decode("utf-8")
     buf.close()
     plt.close(fig)
+
     return img
+# ---------------- UTIL ----------------
+def fig_to_b64(fig, chart_name="chart"):
+    return save_chart_and_get_b64(fig, chart_name)
 
 
 def load(name):
@@ -115,14 +144,46 @@ def safe_month(df):
 def demand_chart(df):
     df = df.dropna(subset=["month"])
 
-    grouped = df.groupby("month")["qty"].sum().reset_index()
+    grouped = df.groupby("month").agg({
+        "qty": "sum",
+        "profit": "sum",
+        "total": "sum"
+    }).reset_index()
 
-    fig, ax = plt.subplots()
-    ax.plot(grouped["month"], grouped["qty"])
-    ax.set_title("Demand Trend")
-    ax.tick_params(axis='x', rotation=45)
+    fig, ax = plt.subplots(figsize=(12, 6))
 
-    return fig_to_b64(fig)
+    ax.plot(
+        grouped["month"],
+        grouped["qty"],
+        marker="o",
+        linewidth=3,
+        label="Units Sold"
+    )
+
+    ax.plot(
+        grouped["month"],
+        grouped["profit"],
+        marker="s",
+        linewidth=3,
+        label="Profit"
+    )
+
+    ax.plot(
+        grouped["month"],
+        grouped["total"],
+        marker="^",
+        linewidth=3,
+        label="Revenue"
+    )
+
+    ax.set_title("Demand / Revenue / Profit Trend", fontsize=15, weight="bold")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Value")
+    ax.legend()
+    ax.grid(alpha=0.3)
+    plt.xticks(rotation=45)
+
+    return fig_to_b64(fig, "demand_trend")
 
 
 def profit_chart(df):
@@ -132,10 +193,28 @@ def profit_chart(df):
 
 
 def correlation_chart(df):
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(14, 9))
+
     num_df = df.select_dtypes(include=np.number).fillna(0)
-    sns.heatmap(num_df.corr(), ax=ax)
-    return fig_to_b64(fig)
+
+    corr = num_df.corr()
+
+    sns.heatmap(
+        corr,
+        annot=True,
+        fmt=".2f",
+        linewidths=0.5,
+        cmap="coolwarm",
+        ax=ax,
+        annot_kws={
+            "size": 9,
+            "color": "black"
+        }
+    )
+
+    ax.set_title("Business Correlation Heatmap", fontsize=15, weight="bold")
+
+    return fig_to_b64(fig, "correlation_heatmap")
 
 
 def anomaly_chart(df):
