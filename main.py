@@ -32,7 +32,7 @@ PAGE_BUILDER_REGISTRY = {
     "reorder": build_reorder_page,
     "risk": build_risk_page,
     "data_cleaning": build_data_cleaning_visualization_page,
-    "products_return": build_products_return_page,
+
     "purchase_orders": build_purchase_orders_page,
     "admin": build_admin_page,
 }
