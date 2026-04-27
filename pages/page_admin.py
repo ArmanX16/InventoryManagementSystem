@@ -28,7 +28,7 @@ def chart_to_base64(fig):
 
 
 def get_ai_metrics():
-    data = list(ai_sales_col.find({}, {"_id": 0}).limit(10))
+    data = list(ai_sales_col.find().limit(10))
 
     if not data:
         return {"profit": 0, "anomaly_count": 0, "avg_profit": 0, "clusters": {}}
@@ -77,7 +77,7 @@ def profit_trend_chart():
     return chart_to_base64(fig)
 
 def stock_chart():
-    data = list(products_col.find({}, {"_id": 0}).limit(10))
+    data = list(products_col.find().limit(10))
 
     names = [p["name"] for p in data][:10]
     stock = [p.get("current_stock", 0) for p in data][:10]
@@ -198,7 +198,7 @@ def build_admin_page(page: ft.Page):
 
     def load_alerts():
         alerts.controls.clear()
-        for p in products_col.find({}, {"_id": 0}):
+        for p in products_col.find():
             if p.get("current_stock", 0) < p.get("safety_stock", 0):
                 alerts.controls.append(ft.Text(f"⚠ {p['name']} Low Stock"))
         page.update()
