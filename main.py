@@ -116,8 +116,7 @@ def main(flet_page: ft.Page):
         "active_route": "dashboard",
     }
 
-    # ---------------- APP ----------------
-    # ---------------- APP ----------------
+
     def rebuild_app_shell_with_route(new_active_route):
 
         user = get_session(flet_page, "user")
@@ -134,7 +133,7 @@ def main(flet_page: ft.Page):
 
         application_state["active_route"] = new_active_route
 
-        # 🔥 FAST PAGE CACHE
+
         if "page_cache" not in application_state:
             application_state["page_cache"] = {}
 
@@ -151,7 +150,7 @@ def main(flet_page: ft.Page):
             currently_active_route_key=new_active_route
         )
 
-        # 🔥 LOAD PAGE ONLY ONCE
+
         if new_active_route not in page_cache:
             active_page_builder_function = PAGE_BUILDER_REGISTRY.get(
                 new_active_route,
