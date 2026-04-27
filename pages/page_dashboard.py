@@ -26,6 +26,8 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["inventoryai"]
 collection = db["cleaned_inventory"]
 
+# 🔥 CACHE (IMPORTANT)
+_cached_df = None
 
 _cached_df = None
 
@@ -36,6 +38,8 @@ def load_data():
     if _cached_df is not None:
         return _cached_df
 
+    if _cached_df is not None:
+        return _cached_df
 
     data = list(collection.find({}, {"_id": 0}).limit(3000))
 
@@ -44,7 +48,9 @@ def load_data():
 
     df = pd.DataFrame(data)
 
+    df = pd.DataFrame(data)
 
+    # 🔥 FAST DATE HANDLING
     if "date" in df.columns:
         df["sale_date"] = pd.to_datetime(df["date"], errors="coerce")
     elif "created_at" in df.columns:

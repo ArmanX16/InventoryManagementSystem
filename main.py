@@ -7,6 +7,7 @@ from pages.page_products_return import build_products_return_page
 from pages.data_cleaning_visualization import build_data_cleaning_visualization_page
 from pages.page_dashboard import build_dashboard_page
 from pages.page_products import build_products_page
+from pages.page_products_return import build_products_return_page
 from pages.page_categories import build_categories_page
 from pages.page_sales import build_sales_page
 from pages.page_suppliers import build_suppliers_page
@@ -22,6 +23,7 @@ from pages.page_admin import build_admin_page
 PAGE_BUILDER_REGISTRY = {
     "dashboard": build_dashboard_page,
     "products": build_products_page,
+    "products_return": build_products_return_page,
     "categories": build_categories_page,
     "sales": build_sales_page,
     "suppliers": build_suppliers_page,
