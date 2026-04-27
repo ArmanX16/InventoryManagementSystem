@@ -19,6 +19,8 @@ from ui.components import (
 from data.product_service import get_all_products
 from dialogs.add_product_dialog import open_add_product_dialog
 
+# 🔥 CACHE (VERY IMPORTANT)
+_cached_products = None
 
 _cached_products = None
 

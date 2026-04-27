@@ -259,6 +259,7 @@ ALL_ALERTS = [
 NAVIGATION_ITEMS = [
     ("dashboard", ft.Icons.DASHBOARD, "Dashboard"),
     ("products", ft.Icons.INVENTORY, "Products"),
+    ("products_return", ft.Icons.ASSIGNMENT_RETURNED_SHARP, "Products Return"),
     ("categories", ft.Icons.CATEGORY, "Categories"),
     ("sales", ft.Icons.SHOPPING_CART, "Sales"),
     ("suppliers", ft.Icons.LOCAL_SHIPPING, "Suppliers"),
