@@ -18,12 +18,12 @@ def to_bool(val):
     return True if val == "True" else False
 
 
-# ✅ IMPORTANT: MUST RETURN UI (not use page.add)
+
 def build_employees_page(page: ft.Page):
 
     selected_id = {"value": None}
 
-    # ---------------- INPUT FIELDS ----------------
+
 
     employee_id = ft.TextField(label="Employee ID")
     name = ft.TextField(label="Name")
@@ -68,7 +68,12 @@ def build_employees_page(page: ft.Page):
             ft.dropdown.Option("False"),
         ],
     )
-
+    search_f = ft.TextField(
+        label="Search Employee",
+        hint_text="Search by Employee ID, Name, Role, Email",
+        width=500,
+        prefix_icon=ft.Icons.SEARCH,
+    )
     # ---------------- TABLE ----------------
 
     table = ft.DataTable(
@@ -82,7 +87,7 @@ def build_employees_page(page: ft.Page):
         rows=[]
     )
 
-    # ---------------- FUNCTIONS ----------------
+
 
     def clear_fields(e=None):
         selected_id["value"] = None
@@ -121,15 +126,33 @@ def build_employees_page(page: ft.Page):
     def load():
         table.rows.clear()
 
-        for emp in collection.find():
+        search_text = search_f.value.strip()
 
+        if search_text:
+            employees = collection.find(
+                {
+                    "$or": [
+                        {"employee_id": {"$regex": search_text, "$options": "i"}},
+                        {"name": {"$regex": search_text, "$options": "i"}},
+                        {"role": {"$regex": search_text, "$options": "i"}},
+                        {"email": {"$regex": search_text, "$options": "i"}},
+                    ]
+                }
+            ).limit(50)
+        else:
+            employees = collection.find().limit(50)
+
+        for emp in employees:
             def click(e, emp_data=emp):
                 fill(emp_data)
 
             table.rows.append(
                 ft.DataRow(
                     cells=[
-                        ft.DataCell(ft.Text(emp.get("employee_id", "")), on_tap=click),
+                        ft.DataCell(
+                            ft.Text(emp.get("employee_id", "")),
+                            on_tap=click
+                        ),
                         ft.DataCell(ft.Text(emp.get("name", ""))),
                         ft.DataCell(ft.Text(emp.get("role", ""))),
                         ft.DataCell(ft.Text(str(emp.get("salary", "")))),
@@ -140,6 +163,8 @@ def build_employees_page(page: ft.Page):
 
         page.update()
 
+    def search_emp(e):
+        load()
     def add_emp(e):
         data = {
             "employee_id": employee_id.value,
@@ -195,10 +220,8 @@ def build_employees_page(page: ft.Page):
         clear_fields()
         load()
 
-    # ---------------- UI (WHITE BACKGROUND) ----------------
-
     layout = ft.Container(
-        bgcolor="white",   # ✅ WHITE BACKGROUND
+        bgcolor="white",
         expand=True,
         padding=20,
         content=ft.Column(
@@ -211,11 +234,19 @@ def build_employees_page(page: ft.Page):
                 ft.Row([performance_score, total_sales, anomaly_flag]),
                 address,
 
+                search_f,
+
                 ft.Row([
                     ft.ElevatedButton("Add", on_click=add_emp),
                     ft.ElevatedButton("Update", on_click=update_emp),
                     ft.ElevatedButton("Delete", on_click=delete_emp),
                     ft.ElevatedButton("Clear", on_click=clear_fields),
+                    ft.ElevatedButton(
+                        "Search",
+                        bgcolor="#8b5cf6",
+                        color="white",
+                        on_click=search_emp
+                    ),
                 ]),
 
                 table
@@ -225,7 +256,7 @@ def build_employees_page(page: ft.Page):
         )
     )
 
-    # load AFTER UI created
+
     load()
 
     return layout

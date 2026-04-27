@@ -16,7 +16,12 @@ def build_categories_page(flet_page: ft.Page):
     name_f = ft.TextField(label="Category Name", width=350)
     desc_f = ft.TextField(label="Description", width=500, multiline=True)
     time_f = ft.TextField(label="Created At", width=250, disabled=True)
-
+    search_f = ft.TextField(
+        label="Search Category",
+        hint_text="Search by ID, Name, or Description",
+        width=500,
+        prefix_icon=ft.Icons.SEARCH,
+    )
     table = ft.DataTable(
         columns=[
             ft.DataColumn(ft.Text("ID")),
@@ -47,9 +52,28 @@ def build_categories_page(flet_page: ft.Page):
 
     def load(data=None):
         table.rows.clear()
-        data = data if data else col.find()
 
-        for d in data:
+        if data is None:
+            search_text = search_f.value.strip()
+
+            if search_text:
+                records = list(
+                    col.find(
+                        {
+                            "$or": [
+                                {"_id": {"$regex": search_text, "$options": "i"}},
+                                {"name": {"$regex": search_text, "$options": "i"}},
+                                {"description": {"$regex": search_text, "$options": "i"}},
+                            ]
+                        }
+                    ).limit(20)
+                )
+            else:
+                records = list(col.find().limit(20))
+        else:
+            records = list(data)[:20]
+
+        for d in records:
             def click(e, x=d):
                 fill(x)
 
@@ -63,8 +87,11 @@ def build_categories_page(flet_page: ft.Page):
                     ]
                 )
             )
+
         flet_page.update()
 
+    def search_data(e):
+        load()
     def add(e):
         if not id_f.value:
             return
@@ -101,7 +128,12 @@ def build_categories_page(flet_page: ft.Page):
     btn_upd = ft.ElevatedButton("Update", bgcolor="#3b82f6", color="white", on_click=update)
     btn_del = ft.ElevatedButton("Delete", bgcolor="#ef4444", color="white", on_click=delete)
     btn_clr = ft.ElevatedButton("Clear", bgcolor="#64748b", color="white", on_click=reset)
-
+    btn_search = ft.ElevatedButton(
+        "Search",
+        bgcolor="#8b5cf6",
+        color="white",
+        on_click=search_data
+    )
     form = ft.Container(
         content=ft.Column(
             [
@@ -110,7 +142,11 @@ def build_categories_page(flet_page: ft.Page):
                 name_f,
                 desc_f,
                 time_f,
-                ft.Row([btn_add, btn_upd, btn_del, btn_clr], spacing=20),
+                search_f,
+                ft.Row(
+                    [btn_add, btn_upd, btn_del, btn_clr, btn_search],
+                    spacing=20
+                ),
             ],
             spacing=15,
         ),

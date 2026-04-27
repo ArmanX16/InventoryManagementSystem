@@ -137,7 +137,7 @@ def build_sales_page(flet_page: ft.Page):
         product_table.rows.clear()
         query = search.value.lower() if search.value else ""
 
-        for p in products_col.find().limit(100):
+        for p in products_col.find().limit(20):
             if query and query not in p.get("name", "").lower():
                 continue
 

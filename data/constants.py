@@ -266,7 +266,7 @@ NAVIGATION_ITEMS = [
     ("forecast", ft.Icons.TRENDING_UP, "Demand Forecast"),
     ("reorder", ft.Icons.AUTORENEW, "Smart Reorder"),
     ("risk", ft.Icons.WARNING, "Risk & Alerts"),
-
+    ("products_return", ft.Icons.ASSIGNMENT_RETURNED_SHARP, "Products Return"),
     ("data_cleaning", ft.Icons.CLEANING_SERVICES, "Data Cleaning"),
     ("purchase_orders", ft.Icons.RECEIPT, "Purchase Orders"),
     ("admin", ft.Icons.ADMIN_PANEL_SETTINGS, "Admin Panel"),

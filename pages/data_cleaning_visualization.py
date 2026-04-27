@@ -18,18 +18,12 @@ from datetime import datetime
 import os
 import uuid
 
-# ----------------database ----------------
 client = MongoClient("mongodb://localhost:27017/")
 raw_db = client["inventory"]
 clean_db = client["inventoryai"]
 
-# ---------------- ADD THIS NEW FUNCTION ----------------
-def save_chart_and_get_b64(fig, chart_name):
-    """
-    Save chart inside charts/ folder with unique filename
-    and also return base64 for Flet UI display
-    """
 
+def save_chart_and_get_b64(fig, chart_name):
     folder = "charts"
     os.makedirs(folder, exist_ok=True)
 
@@ -57,7 +51,7 @@ def save_chart_and_get_b64(fig, chart_name):
     plt.close(fig)
 
     return img
-# ---------------- UTIL ----------------
+
 def fig_to_b64(fig, chart_name="chart"):
     return save_chart_and_get_b64(fig, chart_name)
 

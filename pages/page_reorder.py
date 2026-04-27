@@ -66,9 +66,7 @@ def build_reorder_page(flet_page: ft.Page):
         except:
             pass
 
-    # ─────────────────────────────
-    # LOW STOCK DISPLAY
-    # ─────────────────────────────
+
     def refresh_low_stock():
         low_stock_column.controls.clear()
 
@@ -88,9 +86,7 @@ def build_reorder_page(flet_page: ft.Page):
             except:
                 continue
 
-    # ─────────────────────────────
-    # AUTO TABLE
-    # ─────────────────────────────
+
     def refresh_auto_table():
         rows = []
 
@@ -115,9 +111,7 @@ def build_reorder_page(flet_page: ft.Page):
             rows=rows
         ))
 
-    # ─────────────────────────────
-    # AI ENGINE
-    # ─────────────────────────────
+
     def auto_engine():
         while ai_mode["value"]:
             model = ai_model["model"]
