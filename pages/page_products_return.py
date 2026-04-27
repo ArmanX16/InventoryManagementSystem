@@ -33,7 +33,7 @@ products_return_col = db["products_return"]
 #----------Button-----------------------
 
 def return_product_button(product_id):
-    product = products_col.find_one({"product_id": product_id}).limit(10)
+    product = products_col.find_one({"product_id": product_id})
     if not product:
         return
     product.pop("_id", None)
@@ -44,7 +44,7 @@ def return_product_button(product_id):
 
 
 def cancell_return_button(product_id):
-    product = products_return_col.find_one({"product_id": product_id}).limit(10)
+    product = products_return_col.find_one({"product_id": product_id})
     if not product:
         return
     product.pop("_id", None)
@@ -92,9 +92,9 @@ def build_products_return_page(flet_page: ft.Page):
                         {"supplier_id": {"$regex": search_text, "$options": "i"}},
                     ]
                 }
-            ).limit(50)
+            ).limit(10)
         else:
-            products = products_col.find().limit(50)
+            products = products_col.find().limit(10)
 
         for product in products:
             product_table_rows.append(
