@@ -21,7 +21,7 @@ def get_next_po():
         {"$inc": {"seq": 1}},
         upsert=True,
         return_document=True
-    )
+    ).limit(20)
     return f"PO{counter['seq']}"
 
 
@@ -36,7 +36,7 @@ def build_purchase_orders_page(flet_page: ft.Page):
                 key=p["product_id"],
                 text=f"{p['product_id']} - {p['name']}"
             )
-            for p in products_col.find({}, {"product_id": 1, "name": 1}).limit(100)
+            for p in products_col.find({}, {"product_id": 1, "name": 1}).limit(20)
         ]
 
     def load_suppliers():
@@ -45,7 +45,7 @@ def build_purchase_orders_page(flet_page: ft.Page):
                 key=str(s["_id"]),
                 text=f"{s['_id']} - {s['name']}"
             )
-            for s in suppliers_col.find({}, {"_id": 1, "name": 1}).limit(100)
+            for s in suppliers_col.find({}, {"_id": 1, "name": 1}).limit(20)
         ]
 
     # ── FIELDS ────────────────────────────────────────────
@@ -80,11 +80,20 @@ def build_purchase_orders_page(flet_page: ft.Page):
         border_color=BORDER_DEFAULT,
     )
     error_text = ft.Text("", color="red", size=12)
+    search_f = ft.TextField(
+        label="Search Purchase Order",
+        hint_text="Search by PO ID, Product ID, Supplier ID or Status",
+        width=500,
+        prefix_icon=ft.Icons.SEARCH,
+        color=TEXT_PRIMARY,
+        bgcolor=SURFACE_DARK,
+        border_color=BORDER_DEFAULT,
+    )
     table_column = ft.Column([])
 
     # ── AUTO DELIVERY ─────────────────────────────────────
     def calc_delivery(e=None):
-        sup = suppliers_col.find_one({"_id": supplier_dd.value})
+        sup = suppliers_col.find_one({"_id": supplier_dd.value}).limit(20)
         if not sup:
             return
         lead_days = int(sup.get("avg_lead_time", 7))
@@ -127,16 +136,45 @@ def build_purchase_orders_page(flet_page: ft.Page):
 
     # ── REFRESH TABLE ─────────────────────────────────────
     def refresh_table():
-        pos = list(purchase_col.find().limit(100))
+        search_text = search_f.value.strip()
+
+        if search_text:
+            pos = list(
+                purchase_col.find(
+                    {
+                        "$or": [
+                            {"_id": {"$regex": search_text, "$options": "i"}},
+                            {"product_id": {"$regex": search_text, "$options": "i"}},
+                            {"supplier_id": {"$regex": search_text, "$options": "i"}},
+                            {"status": {"$regex": search_text, "$options": "i"}},
+                        ]
+                    }
+                ).limit(20)
+            )
+        else:
+            pos = list(purchase_col.find().limit(20))
+
         from ui.components import build_data_table
+
         table_column.controls.clear()
         table_column.controls.append(
             build_data_table(
-                column_labels=["PO ID", "Product", "Supplier", "Qty", "Order Date", "Status"],
+                column_labels=[
+                    "PO ID",
+                    "Product",
+                    "Supplier",
+                    "Qty",
+                    "Order Date",
+                    "Status",
+                ],
                 table_rows=build_rows(pos),
             )
         )
+
         flet_page.update()
+
+    def search_po(e):
+        refresh_table()
 
     # ── FILL FIELDS ───────────────────────────────────────
     def fill_fields(po):
@@ -233,12 +271,20 @@ def build_purchase_orders_page(flet_page: ft.Page):
             ft.Row([delivery_f, delay_dd], spacing=12),
             ft.Container(height=8),
             error_text,
+            search_f,
             ft.Row([
                 ft.ElevatedButton("Add", bgcolor=COLOR_SUCCESS, color="white", on_click=add_po),
                 ft.ElevatedButton("Update", bgcolor=ACCENT_PRIMARY, color="white", on_click=update_po),
                 ft.ElevatedButton("Delete", bgcolor=COLOR_DANGER, color="white", on_click=delete_po),
                 ft.ElevatedButton("Clear", on_click=clear_fields),
+                ft.ElevatedButton(
+                    "Search",
+                    bgcolor="#8b5cf6",
+                    color="white",
+                    on_click=search_po
+                ),
             ], spacing=12),
+
         ], spacing=10)
     )
 

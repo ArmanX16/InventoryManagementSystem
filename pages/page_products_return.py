@@ -70,10 +70,33 @@ def build_products_return_page(flet_page: ft.Page):
     main_container = ft.Column()
 
     product_table_rows = []
+    search_f = ft.TextField(
+        label="Search Product",
+        hint_text="Search by Product ID, Name, Category, Supplier",
+        width=500,
+        prefix_icon=ft.Icons.SEARCH,
+    )
 
     def load_products():
         product_table_rows.clear()
-        for product in products_col.find():
+
+        search_text = search_f.value.strip()
+
+        if search_text:
+            products = products_col.find(
+                {
+                    "$or": [
+                        {"product_id": {"$regex": search_text, "$options": "i"}},
+                        {"name": {"$regex": search_text, "$options": "i"}},
+                        {"category_id": {"$regex": search_text, "$options": "i"}},
+                        {"supplier_id": {"$regex": search_text, "$options": "i"}},
+                    ]
+                }
+            ).limit(10)
+        else:
+            products = products_col.find().limit(10)
+
+        for product in products:
             product_table_rows.append(
                 ft.DataRow(
                     cells=[
@@ -81,8 +104,8 @@ def build_products_return_page(flet_page: ft.Page):
                         ft.DataCell(ft.Text(product.get("name", ""), color=TEXT_PRIMARY, size=13)),
                         ft.DataCell(ft.Text(product.get("category_id", ""), color=TEXT_SECONDARY, size=12)),
                         ft.DataCell(ft.Text(str(product.get("current_stock", "")), color=TEXT_SECONDARY, size=13)),
-                        ft.DataCell(ft.Text(f'₹{product.get("selling_price", ""):,.2f}', color=TEXT_PRIMARY, size=13)),
-                        ft.DataCell(ft.Text(f'₹{product.get("cost_price", ""):,.2f}', color=TEXT_PRIMARY, size=13)),
+                        ft.DataCell(ft.Text(f'₹{product.get("selling_price", 0):,.2f}', color=TEXT_PRIMARY, size=13)),
+                        ft.DataCell(ft.Text(f'₹{product.get("cost_price", 0):,.2f}', color=TEXT_PRIMARY, size=13)),
                         ft.DataCell(ft.Text(product.get("supplier_id", ""), color=TEXT_SECONDARY, size=12)),
                         ft.DataCell(
                             ft.IconButton(
@@ -96,15 +119,24 @@ def build_products_return_page(flet_page: ft.Page):
                     ]
                 )
             )
+
         flet_page.update()
 
+    def search_products(e):
+        load_products()
     def handle_return(product_id):
         return_product_button(product_id)
         load_products()
 
+    btn_search = ft.ElevatedButton(
+        "Search",
+        bgcolor="#8b5cf6",
+        color="white",
+        on_click=search_products
+    )
     def load_status():
         status_rows.clear()
-        for product in products_return_col.find():
+        for product in products_return_col.find().limit(10):
             status_rows.append(
                 ft.DataRow(
                     cells=[
@@ -169,7 +201,10 @@ def build_products_return_page(flet_page: ft.Page):
             [
                 ft.Container(height=12),
                 ft.Column(
-                    [
+                    [   search_f,
+                        ft.Container(height=10),
+                        btn_search,
+                        ft.Container(height=10),
                         build_data_table(
                             column_labels=[
                                 "Product ID",

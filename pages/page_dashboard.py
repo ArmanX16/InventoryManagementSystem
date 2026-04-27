@@ -29,19 +29,24 @@ collection = db["cleaned_inventory"]
 # 🔥 CACHE (IMPORTANT)
 _cached_df = None
 
+_cached_df = None
 
-# ---------------- FAST LOAD ----------------
+
 def load_data():
     global _cached_df
 
     if _cached_df is not None:
         return _cached_df
 
-    # 🔥 LIMIT DATA (MOST IMPORTANT FIX)
+    if _cached_df is not None:
+        return _cached_df
+
     data = list(collection.find({}, {"_id": 0}).limit(3000))
 
     if not data:
         return pd.DataFrame()
+
+    df = pd.DataFrame(data)
 
     df = pd.DataFrame(data)
 
@@ -53,7 +58,7 @@ def load_data():
     else:
         df["sale_date"] = pd.Timestamp("today")
 
-    # 🔥 FAST NUMERIC CONVERSION
+
     numeric_cols = ["qty", "quantity", "total", "selling_price", "cost_price", "current_stock"]
     for col in numeric_cols:
         if col in df.columns:
@@ -62,7 +67,7 @@ def load_data():
     df["quantity"] = df["qty"] if "qty" in df.columns else df.get("quantity", 0)
     df["stock_level"] = df.get("current_stock", 0)
 
-    # 🔥 VECTOR CALCULATION (FASTER)
+
     df["revenue"] = df.get("total", df["selling_price"] * df["quantity"])
     df["profit"] = (df.get("selling_price", 0) - df.get("cost_price", 0)) * df["quantity"]
 
@@ -70,14 +75,14 @@ def load_data():
     return df
 
 
-# ---------------- MAIN ----------------
+
 def build_dashboard_page(flet_page: ft.Page):
     df = load_data()
 
     if df.empty:
         return ft.Text("No data available", color="white")
 
-    # 🔥 FAST GROUPING
+
     latest = df.sort_values("sale_date").groupby("product_id", as_index=False).last()
 
     total_products = latest["product_id"].nunique()
@@ -88,9 +93,8 @@ def build_dashboard_page(flet_page: ft.Page):
     out_stock = len(latest[latest["stock_level"] == 0])
     total_revenue = int(df["revenue"].sum())
 
-    # ---------------- ALERTS ----------------
     alerts = []
-    for _, r in latest.head(200).iterrows():  # 🔥 LIMIT LOOP
+    for _, r in latest.head(200).iterrows():
         if r["stock_level"] == 0:
             alerts.append({
                 "type": "danger",
@@ -125,7 +129,7 @@ def build_dashboard_page(flet_page: ft.Page):
         for a in alerts
     ])
 
-    # 🔥 FAST TOP PRODUCTS
+
     top_df = df.groupby("product_id")["quantity"].sum().nlargest(5)
     top_products = latest.set_index("product_id").loc[top_df.index].reset_index()
 
@@ -142,7 +146,7 @@ def build_dashboard_page(flet_page: ft.Page):
         for _, r in top_products.iterrows()
     ]
 
-    # 🔥 FAST CHART
+
     cat_data = df.groupby("category_id")["revenue"].sum().nlargest(4)
 
     chart = build_mini_bar_chart(

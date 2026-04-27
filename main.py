@@ -3,7 +3,7 @@ import flet as ft
 from ui.theme import BACKGROUND_DARK
 from ui.shell_layout import build_sidebar_navigation, build_topbar
 from ui.auth_screen import show_auth_screen
-
+from pages.page_products_return import build_products_return_page
 from pages.data_cleaning_visualization import build_data_cleaning_visualization_page
 from pages.page_dashboard import build_dashboard_page
 from pages.page_products import build_products_page
@@ -15,7 +15,6 @@ from pages.page_employees import build_employees_page
 from pages.page_forecast import build_forecast_page
 from pages.page_reorder import build_reorder_page
 from pages.page_risk import build_risk_page
-from pages.page_analytics import build_analytics_page
 from pages.page_purchase_orders import build_purchase_orders_page
 from pages.page_admin import build_admin_page
 
@@ -33,7 +32,7 @@ PAGE_BUILDER_REGISTRY = {
     "reorder": build_reorder_page,
     "risk": build_risk_page,
     "data_cleaning": build_data_cleaning_visualization_page,
-    "analytics": build_analytics_page,
+
     "purchase_orders": build_purchase_orders_page,
     "admin": build_admin_page,
 }
@@ -51,7 +50,7 @@ ROLE_ACCESS = {
         "Billing",
         "suppliers",
         "forecast",
-        "analytics",
+
         "purchase_orders",
     ],
 
@@ -119,7 +118,7 @@ def main(flet_page: ft.Page):
         "active_route": "dashboard",
     }
 
-    # ---------------- APP ----------------
+
     def rebuild_app_shell_with_route(new_active_route):
 
         user = get_session(flet_page, "user")
@@ -131,31 +130,37 @@ def main(flet_page: ft.Page):
         role = user.get("role", "Employee")
         allowed_pages = ROLE_ACCESS.get(role, [])
 
-        # restrict invalid routes
         if new_active_route not in allowed_pages:
             new_active_route = "dashboard"
 
         application_state["active_route"] = new_active_route
 
-        active_page_builder_function = PAGE_BUILDER_REGISTRY.get(
-            new_active_route,
-            build_dashboard_page,
-        )
 
-        # ✅ ONLY CHANGE: PASS SESSION DATA
+        if "page_cache" not in application_state:
+            application_state["page_cache"] = {}
+
+        page_cache = application_state["page_cache"]
+
         sidebar_widget = build_sidebar_navigation(
             currently_active_route_key=new_active_route,
             on_navigation_item_click_callback=rebuild_app_shell_with_route,
             on_logout_click_callback=lambda e: logout(),
             user_data=user,
-
         )
 
         topbar_widget = build_topbar(
             currently_active_route_key=new_active_route
         )
 
-        active_page_content_widget = active_page_builder_function(flet_page)
+
+        if new_active_route not in page_cache:
+            active_page_builder_function = PAGE_BUILDER_REGISTRY.get(
+                new_active_route,
+                build_dashboard_page,
+            )
+            page_cache[new_active_route] = active_page_builder_function(flet_page)
+
+        active_page_content_widget = page_cache[new_active_route]
 
         flet_page.controls.clear()
 

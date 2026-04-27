@@ -68,7 +68,7 @@ def build_suppliers_page(flet_page: ft.Page):
     # ── REFRESH SUPPLIER TABLE ────────────────────────────
     def refresh_table():
         from ui.components import build_data_table
-        sups = list(suppliers_col.find().limit(100))
+        sups = list(suppliers_col.find().limit(10))
         table_column.controls.clear()
         table_column.controls.append(
             build_data_table(
@@ -174,7 +174,7 @@ def build_suppliers_page(flet_page: ft.Page):
 
     def load_po_table():
         po_table.rows.clear()
-        for po in po_col.find().limit(100):
+        for po in po_col.find().limit(10):
             def select_row(ev, data=po):
                 selected_po["value"] = data
                 po_id_f.value       = str(data["_id"])
@@ -225,7 +225,7 @@ def build_suppliers_page(flet_page: ft.Page):
         )
 
         if new_status == "Delivered":
-            product = products_col.find_one({"product_id": po["product_id"]})
+            product = products_col.find_one({"product_id": po["product_id"]}).limit(10)
             if product:
                 try:
                     current = int(product.get("current_stock", 0))

@@ -22,6 +22,8 @@ from dialogs.add_product_dialog import open_add_product_dialog
 # 🔥 CACHE (VERY IMPORTANT)
 _cached_products = None
 
+_cached_products = None
+
 
 def build_products_page(
     flet_page: ft.Page,
@@ -32,12 +34,12 @@ def build_products_page(
 
     from data.database import categories_collection, suppliers_collection
 
-    db_categories = list(categories_collection.find({}, {"name": 1, "category_id": 1}).limit(50))
-    db_suppliers = list(suppliers_collection.find({}, {"name": 1}).limit(50))
+    db_categories = list(categories_collection.find({}, {"name": 1, "category_id": 1}).limit(20))
+    db_suppliers = list(suppliers_collection.find({}, {"name": 1}).limit(20))
 
     global _cached_products
 
-    # 🔥 LOAD ONLY ONCE
+
     if _cached_products is None:
         _cached_products = get_all_products()
 
@@ -91,6 +93,7 @@ def build_products_page(
         ]
 
     def refresh_table(product_list):
+        limited_products = list(product_list)[:20]
         table_column.controls.clear()
         table_column.controls.append(
             build_data_table(
@@ -98,12 +101,12 @@ def build_products_page(
                     "ID", "Name", "Category",
                     "Stock", "Price", "Supplier", "Actions",
                 ],
-                table_rows=build_rows(product_list),
+                table_rows=build_rows(limited_products),
             )
         )
         flet_page.update()
 
-    # 🔥 SUPER FAST FILTER (NO DB CALL)
+
     def apply_filters(search_text, category):
         search_text = search_text.lower()
 
@@ -131,8 +134,14 @@ def build_products_page(
     def handle_add_product(e):
         def after_add():
             global _cached_products
-            _cached_products = get_all_products()  # 🔥 refresh cache
+
+
+            _cached_products = get_all_products()
             refresh_table(_cached_products)
+            flet_page.update()
+
+        flet_page.dialog = None
+        flet_page.update()
 
         open_add_product_dialog(
             flet_page,
@@ -164,7 +173,7 @@ def build_products_page(
             after_edit,
         )
 
-    # 🔥 DYNAMIC CATEGORY FROM DB
+
     categories = ["All Categories"] + list({
         str(c.get("category_id", "")).strip()
         for c in db_categories if c.get("category_id")

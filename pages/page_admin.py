@@ -6,7 +6,6 @@ import base64
 from io import BytesIO
 import statistics
 
-# ================= DATABASE =================
 client = MongoClient("mongodb://localhost:27017/")
 db = client["inventory"]
 ai_db = client["inventoryai"]
@@ -17,10 +16,8 @@ employees_col = db["employees"]
 customers_col = db["customers"]
 suppliers_col = db["suppliers"]
 
-# 🔥 UPDATED (use cleaned_inventory)
 ai_sales_col = ai_db["cleaned_inventory"]
 
-# ================= UTILS =================
 def chart_to_base64(fig):
     buf = BytesIO()
     fig.savefig(buf, format="png", bbox_inches="tight")
@@ -29,9 +26,9 @@ def chart_to_base64(fig):
     buf.close()
     return img
 
-# ================= AI ANALYTICS =================
+
 def get_ai_metrics():
-    data = list(ai_sales_col.find())
+    data = list(ai_sales_col.find().limit(15))
 
     if not data:
         return {"profit": 0, "anomaly_count": 0, "avg_profit": 0, "clusters": {}}
@@ -51,9 +48,8 @@ def get_ai_metrics():
         "clusters": cluster_count
     }
 
-# ================= CHARTS =================
 def sales_trend_chart():
-    data = list(sales_col.find())
+    data = list(sales_col.find().limit(10))
     dates = {}
 
     for d in data:
@@ -67,7 +63,7 @@ def sales_trend_chart():
     return chart_to_base64(fig)
 
 def profit_trend_chart():
-    data = list(ai_sales_col.find())
+    data = list(ai_sales_col.find().limit(15))
     months = {}
 
     for d in data:
@@ -81,7 +77,7 @@ def profit_trend_chart():
     return chart_to_base64(fig)
 
 def stock_chart():
-    data = list(products_col.find())
+    data = list(products_col.find().limit(10))
 
     names = [p["name"] for p in data][:10]
     stock = [p.get("current_stock", 0) for p in data][:10]
@@ -92,7 +88,6 @@ def stock_chart():
 
     return chart_to_base64(fig)
 
-# ================= CRUD =================
 def add_employee(name, email):
     employees_col.insert_one({
         "name": name,
@@ -109,9 +104,8 @@ def update_employee(emp_id, name):
         {"$set": {"name": name}}
     )
 
-# ================= GENERIC DB VIEWER =================
 def build_collection_table(collection):
-    data = list(collection.find().limit(20))
+    data = list(collection.find().limit(10))
 
     if not data:
         return ft.Text("No data")
@@ -128,7 +122,6 @@ def build_collection_table(collection):
 
     return ft.Column(table_rows, scroll=ft.ScrollMode.AUTO, height=200)
 
-# ================= UI HELPERS =================
 def build_card(content):
     return ft.Container(
         content=content,
@@ -138,7 +131,7 @@ def build_card(content):
         expand=True
     )
 
-# ================= MAIN PAGE =================
+
 def build_admin_page(page: ft.Page):
 
     page.scroll = None
@@ -146,7 +139,6 @@ def build_admin_page(page: ft.Page):
 
     ai_metrics = get_ai_metrics()
 
-    # ===== STATS =====
     stats_row = ft.ResponsiveRow([
         ft.Container(ft.Text(f"Profit\n{ai_metrics['profit']}"), col={"md": 3}),
         ft.Container(ft.Text(f"Anomalies\n{ai_metrics['anomaly_count']}"), col={"md": 3}),
@@ -154,14 +146,14 @@ def build_admin_page(page: ft.Page):
         ft.Container(ft.Text(f"Clusters\n{len(ai_metrics['clusters'])}"), col={"md": 3}),
     ])
 
-    # ===== CHARTS =====
+
     charts_section = ft.ResponsiveRow([
         ft.Container(ft.Image(src="data:image/png;base64," + sales_trend_chart()), col={"md": 4}),
         ft.Container(ft.Image(src="data:image/png;base64," + profit_trend_chart()), col={"md": 4}),
         ft.Container(ft.Image(src="data:image/png;base64," + stock_chart()), col={"md": 4}),
     ])
 
-    # ===== EMPLOYEE =====
+
     name_field = ft.TextField(label="Name", dense=True)
     email_field = ft.TextField(label="Email", dense=True)
 
@@ -169,7 +161,7 @@ def build_admin_page(page: ft.Page):
 
     def load_employees():
         employee_list.controls.clear()
-        for e in employees_col.find():
+        for e in employees_col.find().limit(10):
             employee_list.controls.append(
                 ft.Row([
                     ft.Text(e.get("name"), expand=True),
@@ -201,7 +193,7 @@ def build_admin_page(page: ft.Page):
         ])
     )
 
-    # ===== ALERTS =====
+
     alerts = ft.Column(scroll=ft.ScrollMode.AUTO, height=200)
 
     def load_alerts():
@@ -220,7 +212,7 @@ def build_admin_page(page: ft.Page):
         ])
     )
 
-    # ===== 🔥 DATABASE VIEWER =====
+
     db_view = ft.ResponsiveRow([
         ft.Column([
             build_card(ft.Column([
@@ -237,7 +229,7 @@ def build_admin_page(page: ft.Page):
         ], col={"md": 6}),
     ])
 
-    # ===== FINAL =====
+
     return ft.Container(
         content=ft.Column([
             ft.Text("Admin Dashboard", size=22, weight=ft.FontWeight.BOLD),
@@ -247,7 +239,7 @@ def build_admin_page(page: ft.Page):
                 ft.Column([employee_card], col={"md": 6}),
                 ft.Column([alerts_card], col={"md": 6}),
             ]),
-            db_view  # 🔥 added without breaking UI
+            db_view
         ],
         scroll=ft.ScrollMode.AUTO,
         expand=True),
