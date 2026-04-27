@@ -28,7 +28,7 @@ def chart_to_base64(fig):
 
 
 def get_ai_metrics():
-    data = list(ai_sales_col.find().limit(10))
+    data = list(ai_sales_col.find().limit(15))
 
     if not data:
         return {"profit": 0, "anomaly_count": 0, "avg_profit": 0, "clusters": {}}
@@ -63,7 +63,7 @@ def sales_trend_chart():
     return chart_to_base64(fig)
 
 def profit_trend_chart():
-    data = list(ai_sales_col.find().limit(10))
+    data = list(ai_sales_col.find().limit(15))
     months = {}
 
     for d in data:
