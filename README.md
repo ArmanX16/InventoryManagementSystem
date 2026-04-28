@@ -18,7 +18,8 @@ pip install numpy
 pip install matplotlib
 pip install seaborn
 pip install scikit-learn
-pip install xgboost prophet
+pip install xgboost 
+pip install prophet
 pip install reportlab
 ```
 
