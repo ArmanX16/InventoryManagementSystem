@@ -21,7 +21,7 @@ def get_next_po():
         {"$inc": {"seq": 1}},
         upsert=True,
         return_document=True
-    ).limit(20)
+    )
     return f"PO{counter['seq']}"
 
 
@@ -93,7 +93,7 @@ def build_purchase_orders_page(flet_page: ft.Page):
 
     # ── AUTO DELIVERY ─────────────────────────────────────
     def calc_delivery(e=None):
-        sup = suppliers_col.find_one({"_id": supplier_dd.value}).limit(20)
+        sup = suppliers_col.find_one({"_id": supplier_dd.value})
         if not sup:
             return
         lead_days = int(sup.get("avg_lead_time", 7))
